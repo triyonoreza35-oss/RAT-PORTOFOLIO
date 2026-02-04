@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+@keyframes project-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-project-scroll {
+  display: flex;  
+  width: max-content; /* Kunci agar slider tidak terpotong */
+  animation: project-scroll 3s linear infinite;
+  will-change: transform;
+}
+
+/* Memastikan setiap gambar mengambil lebar penuh dari kartu */
+.project-image-container {
+  width: var(--card-width);
+  flex-shrink: 0;
+}
+/* Tambahkan ini di style tag jika ingin efek glow */
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
+} 
+@keyframes logo-pulse {
+  0%, 100% { opacity: 0.4; filter: brightness(0.8) grayscale(1); }
+  50% { opacity: 1; filter: brightness(1.2) grayscale(0.5); }
+}
+
+.animate-logo-pulse {
+  animation: logo-pulse 4s infinite ease-in-out;
+}
+
