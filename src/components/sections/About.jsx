@@ -7,19 +7,20 @@ export default function About() {
     <section
       id="about"
       className="relative py-28 bg-gradient-to-b from-slate-900 to-slate-950 overflow-hidden"
+      aria-labelledby="about-title"
     >
       <div className="max-w-6xl mx-auto px-4 w-full">
         <div className="relative grid md:grid-cols-2 gap-14 items-center pl-8">
 
-          {/* Vertical Accent Line - Re-animates every time view enters */}
+          {/* Vertical Accent Line */}
           <motion.span
             aria-hidden
             initial={{ opacity: 0, height: 0 }}
-            whileInView={{ opacity: 1, height: "16rem" }} // 16rem = h-64
+            whileInView={{ opacity: 1, height: "16rem" }}
             transition={{ duration: 1, ease: "easeOut" }}
             viewport={{ once: false, amount: 0.2 }}
             className="
-              absolute left-0 top-4 w-px
+              absolute left-0 top-6 w-px
               bg-gradient-to-b
               from-[#A78BFA]
               via-[#A78BFA]/60
@@ -30,14 +31,13 @@ export default function About() {
 
           {/* Photo Section */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
             viewport={{ once: false, amount: 0.3 }}
             className="flex justify-center md:justify-start"
           >
             <div className="relative group">
-              {/* ROTATING COLOR BORDER */}
               <div
                 aria-hidden
                 className="
@@ -47,24 +47,24 @@ export default function About() {
                   blur-[2px]
                 "
               />
-
-              {/* BORDER MASK */}
               <div className="absolute inset-0 rounded-2xl bg-slate-950" />
 
-              {/* IMAGE */}
               <div className="relative w-64 h-80 rounded-2xl overflow-hidden border border-slate-800 bg-slate-900 shadow-xl">
                 <img
                   src="/image/foto.jpeg"
-                  alt="Reza Aditya Triyono"
+                  alt="Foto profil Reza Aditya Triyono"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
             </div>
           </motion.div>
 
-          {/* Text Content Section */}
+          {/* Text Content */}
           <div className="max-w-xl">
             <motion.h2
+              id="about-title"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -79,12 +79,12 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
               viewport={{ once: false, amount: 0.3 }}
-              className="text-slate-300 text-base sm:text-lg leading-relaxed mb-5 tracking-wide text-justify font-serif"
-              style={{ fontFamily: "'Libre Baskerville', serif" }}
+              className="text-slate-300 text-base sm:text-lg leading-relaxed mb-4"
             >
-              Saya adalah Lulusan Teknologi Informasi dari <strong>Universitas Bina Sarana Informatika</strong> 
-              yang memiliki dedikasi tinggi dalam pengembangan web modern. Fokus utama saya adalah menjembatani 
-              fungsionalitas backend dengan antarmuka frontend yang estetik.
+              Saya adalah lulusan <strong>Teknologi Informasi</strong> dari{" "}
+              <strong>Universitas Bina Sarana Informatika</strong> dengan fokus pada
+              pengembangan web modern yang mengutamakan keseimbangan antara
+              fungsionalitas backend dan antarmuka frontend yang estetik.
             </motion.p>
 
             <motion.p
@@ -92,13 +92,11 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               viewport={{ once: false, amount: 0.3 }}
-              className="text-slate-400 text-sm sm:text-base leading-relaxed mb-6 text-justify font-serif"
-              style={{ fontFamily: "'Libre Baskerville', serif" }}
+              className="text-slate-400 text-sm sm:text-base leading-relaxed mb-6"
             >
-              Saya terbiasa bekerja dengan ketelitian tinggi untuk memastikan setiap 
-              baris kode yang saya tulis menghasilkan performa optimal dan pengalaman 
-              pengguna yang inklusif di berbagai perangkat. Saya percaya bahwa setiap 
-              detail dalam kode berkontribusi pada kesuksesan produk digital.
+              Saya terbiasa bekerja dengan ketelitian tinggi, memastikan setiap
+              baris kode berkontribusi pada performa optimal, aksesibilitas, dan
+              pengalaman pengguna yang konsisten di berbagai perangkat.
             </motion.p>
 
             <motion.p
@@ -106,7 +104,11 @@ export default function About() {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.4 }}
               viewport={{ once: false }}
-              className="text-slate-500 text-sm italic border-l-2 border-[#A78BFA]/30 pl-4"
+              className="
+                text-slate-500 text-sm italic
+                border-l-2 border-[#A78BFA]/30
+                pl-4
+              "
             >
               Terbuka untuk peluang kerja dan kolaborasi profesional.
             </motion.p>
@@ -125,4 +127,4 @@ export default function About() {
       `}</style>
     </section>
   );
-} 
+}
