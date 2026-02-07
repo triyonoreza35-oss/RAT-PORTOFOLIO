@@ -81,7 +81,7 @@ export default function About() {
               viewport={{ once: false, amount: 0.3 }}
               className="text-slate-300 text-base sm:text-lg leading-relaxed mb-4"
             >
-              Saya adalah lulusan <strong>Teknologi Informasi</strong> dari{" "}
+              Saya adalah Mahasiswa <strong>Teknologi Informasi</strong> dari{" "}
               <strong>Universitas Bina Sarana Informatika</strong> dengan fokus pada
               pengembangan web modern yang mengutamakan keseimbangan antara
               fungsionalitas backend dan antarmuka frontend yang estetik.

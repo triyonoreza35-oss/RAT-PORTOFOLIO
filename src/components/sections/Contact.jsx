@@ -39,8 +39,8 @@ export default function Contact() {
           <ContactItem
             icon={Linkedin}
             label="LinkedIn"
-            lines={["linkedin.com/in", "/reza-aditya"]}
-            href="https://linkedin.com/in/reza-aditya"
+            lines={["linkedin.com/in", "/Reza Aditya Triyono"]}
+            href="https://linkedin.com/in/Reza Aditya Triyono"
           />
         </div>
       </div>
