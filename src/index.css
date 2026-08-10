@@ -10,9 +10,15 @@ html {
 }
 
 /* Memastikan aplikasi mengambil lebar penuh secara responsif */
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 #root {
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh; /* Mencegah elemen terdesak/menumpuk akibat address bar HP */
   margin: 0;
   padding: 0;
 }
