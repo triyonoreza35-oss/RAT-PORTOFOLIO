@@ -283,8 +283,8 @@ header {
   /* 2. Home Section: Posisikan konten tepat di tengah layar HP tanpa area kosong di bawah */
   #home {
     min-height: 100dvh !important;
-    padding-top: 5rem !important;    /* Ruang aman di bawah Header */
-    padding-bottom: 5.5rem !important; /* Ruang aman di atas Navbar Bawah */
+    padding-top: 5.1rem !important;    /* Ruang aman di bawah Header */
+    padding-bottom: 7.5rem !important; /* Ruang aman di atas Navbar Bawah */
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important; /* Memusatkan isi secara vertikal */
