@@ -5,62 +5,76 @@
 /* ============================================
    1. GLOBAL RESET & BASE STYLES
    ============================================ */
-html, body {
+html {
   scroll-behavior: smooth;
-  background-color: #07080C !important;
-  color: #f8fafc;
 }
 
-body {
-  overflow-x: hidden;
-  width: 100%;
-}
-
+/* Memastikan aplikasi mengambil lebar penuh secara responsif */
 #root {
   width: 100%;
   min-height: 100vh;
-  min-height: 100dvh;
   margin: 0;
   padding: 0;
-  background-color: #07080C;
-}
-
-/* Hilangkan garis border putih tajam pada top header di HP */
-header {
-  border-bottom-color: rgba(255, 255, 255, 0.05) !important;
-  background-color: rgba(7, 8, 12, 0.9) !important;
-  backdrop-filter: blur(10px) !important;
 }
 
 /* ============================================
    2. INTRO SCENE ANIMATIONS (Robot & Terminal)
    ============================================ */
 @keyframes scan {
-  0% { top: 0%; opacity: 0.2; }
-  50% { opacity: 1; }
-  100% { top: 100%; opacity: 0.2; }
+  0% {
+    top: 0%;
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    top: 100%;
+    opacity: 0.2;
+  }
 }
 
+/* Custom Bobbing Animation untuk Robot Hover-Walk */
 @keyframes bobbing {
-  0% { transform: translateY(0px) rotate(1deg); }
-  100% { transform: translateY(-4px) rotate(-1deg); }
+  0% {
+    transform: translateY(0px) rotate(1deg);
+  }
+
+  100% {
+    transform: translateY(-4px) rotate(-1deg);
+  }
 }
 
+/* Smooth Fade In untuk Terminal Text */
 .animate-fade-in {
   animation: fadeIn 0.25s ease-in forwards;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(2px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ============================================
    3. PROJECT SECTION ANIMATIONS
    ============================================ */
 @keyframes project-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .animate-project-scroll {
@@ -70,18 +84,28 @@ header {
   will-change: transform;
 }
 
+/* Memastikan setiap gambar mengambil lebar penuh dari kartu */
 .project-image-container {
   width: var(--card-width);
   flex-shrink: 0;
 }
 
+/* Efek Glow pada Card/Button */
 .hover-glow:hover {
   box-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
 }
 
 @keyframes logo-pulse {
-  0%, 100% { opacity: 0.4; filter: brightness(0.8) grayscale(1); }
-  50% { opacity: 1; filter: brightness(1.2) grayscale(0.5); }
+  0%,
+  100% {
+    opacity: 0.4;
+    filter: brightness(0.8) grayscale(1);
+  }
+
+  50% {
+    opacity: 1;
+    filter: brightness(1.2) grayscale(0.5);
+  }
 }
 
 .animate-logo-pulse {
@@ -92,17 +116,38 @@ header {
    4. HOME SECTION — Hero Animations
    ============================================ */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes lineGrow {
-  from { height: 0; opacity: 0; }
-  to { height: 192px; opacity: 1; }
+  from {
+    height: 0;
+    opacity: 0;
+  }
+
+  to {
+    height: 192px;
+    opacity: 1;
+  }
 }
 
+/* ============================================
+   HOME SECTION — CINEMATIC TEXT REVEAL
+   ============================================ */
 @keyframes scroll-reveal {
-  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
 .scroll-reveal {
@@ -122,9 +167,12 @@ header {
 }
 
 @keyframes blink {
-  to { visibility: hidden; }
+  to {
+    visibility: hidden;
+  }
 }
 
+/* Hero Ambient Glowing Blobs */
 .hero-glow {
   position: absolute;
   width: 480px;
@@ -150,13 +198,25 @@ header {
 }
 
 @keyframes drift1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(40px, 30px) scale(1.08); }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(40px, 30px) scale(1.08);
+  }
 }
 
 @keyframes drift2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-30px, -25px) scale(1.05); }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(-30px, -25px) scale(1.05);
+  }
 }
 
 /* ============================================
@@ -165,51 +225,33 @@ header {
 @media (prefers-reduced-motion: reduce) {
   .animate-project-scroll,
   .animate-logo-pulse,
-  .animate-fade-in {
+  .animate-fade-in,
+  .animate-\[scan_0\.8s_ease-in-out_infinite\] {
     animation: none !important;
   }
+
+  /* Memastikan animasi bobbing robot juga dimatikan untuk reduced motion */
+  [class*="animate-[bobbing"] {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  #home [class*="animate-["] {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  #home span[aria-hidden] {
+    height: 192px !important;
+  }
+
+  .typing-cursor {
+    animation: none !important;
+    visibility: hidden;
+  }
+
   .hero-glow {
     animation: none !important;
-  }
-}
-
-/* ============================================
-   6. UNIFORM MOBILE FIXES (Target: 360px & up)
-   ============================================ */
-@media (max-width: 639px) {
-  #home {
-    min-height: 100dvh !important;
-    padding-top: 5rem !important;
-    padding-bottom: 5.5rem !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-  }
-
-  #home .max-w-2xl {
-    padding-left: 0.875rem !important;
-  }
-
-  #home h1 {
-    font-size: clamp(1.5rem, 7vw, 1.85rem) !important;
-    line-height: 2.2rem !important;
-    word-break: break-word !important;
-  }
-
-  #home h2 {
-    font-size: clamp(1rem, 4.5vw, 1.15rem) !important;
-    margin-bottom: 1rem !important;
-  }
-
-  #home p {
-    font-size: 0.85rem !important;
-    line-height: 1.45rem !important;
-    color: #cbd5e1 !important;
-  }
-
-  #home a {
-    padding-top: 0.65rem !important;
-    padding-bottom: 0.65rem !important;
-    font-size: 0.85rem !important;
   }
 }
