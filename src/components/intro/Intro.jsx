@@ -365,219 +365,182 @@ export default function Intro({ onComplete }) {
             infinite;
         }
 
-    /* =========================================================
-   MOBILE RESPONSIVE FIX (EXACT SCREENSHOT MATCH)
-   Desktop rules (>= 1024px) remain untouched.
-   ========================================================= */
+        /* ==========================================
+           MOBILE RESPONSIVE ONLY
+           Desktop rules above remain unchanged.
+           ========================================== */
 
-@media (max-width: 639px) {
-
-  /* 1. FLOOR GRID (Bagian Bawah Layar) */
-  .floor-grid,
-  .floor-grid-wrapper,
-  .intro-grid {
-    position: absolute !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 28dvh !important;
-    z-index: 1 !important;
-  }
-
-  /* 2. COMPUTER TERMINAL (Kanan Middle-Lower) */
-  .computer-terminal,
-  .terminal-wrapper {
-    position: absolute !important;
-    right: clamp(12px, 4vw, 24px) !important;
-    bottom: clamp(30dvh, 34dvh, 38dvh) !important;
-    left: auto !important;
-    top: auto !important;
-    width: clamp(170px, 48vw, 210px) !important;
-    z-index: 10 !important;
-    transform: none !important;
-  }
-
-  .computer-screen {
-    width: 100% !important;
-    height: auto !important;
-    min-height: 105px !important;
-    padding: 10px 12px !important;
-    border-radius: 12px !important;
-  }
-
-  .computer-base {
-    width: 75px !important;
-    height: 20px !important;
-    margin: 0 auto !important;
-  }
-
-  /* 3. ROBOT (Di Kiri Bawah, Berdiri di Atas Grid) */
+       @media (max-width: 639px) {
   .robot-character {
-    position: absolute !important;
-    left: clamp(12px, 3vw, 20px) !important;
-    bottom: clamp(30px, 5dvh, 55px) !important;
-    top: auto !important;
-    right: auto !important;
-    z-index: 20 !important;
-    transform: none !important;
+    left: 50%;
+    bottom: clamp(170px, 28vh, 220px);
+
+    /*
+     * Initial position:
+     * center the robot horizontally.
+     */
+    transform: translateX(-50%);
   }
 
-  /* Pergerakan Robot saat Jalan/Target di Mobile (Tetap di Area Kiri) */
-  .robot-character.is-mobile-walking,
-  .robot-character.is-walking,
+  /*
+   * During WALKING:
+   * move the robot toward the computer.
+   *
+   * The transform is controlled entirely here so it
+   * cannot conflict with Tailwind translate-x classes.
+   */
+  .robot-character.is-mobile-walking {
+    transform:
+      translateX(
+        calc(
+          -50% +
+          clamp(55px, 16vw, 75px)
+        )
+      );
+  }
+
+  /*
+   * After reaching the computer, keep the robot there.
+   *
+   * This is important:
+   * WALKING -> SEARCHING -> FOUND -> PORTAL
+   * must NOT return the robot to its initial position.
+   */
   .robot-character.is-mobile-target {
-    transform: translateX(clamp(15px, 4vw, 30px)) !important;
+    transform:
+      translateX(
+        calc(
+          -50% +
+          clamp(55px, 16vw, 75px)
+        )
+      );
   }
 
-  .robot-character svg,
-  .robot-svg {
-    width: clamp(85px, 24vw, 105px) !important;
-    height: auto !important;
+  /*
+   * Keep the robot itself inside the viewport.
+   */
+  .robot-character svg {
+    width: 6.5rem;
+    height: 7.5rem;
   }
 
-  /* Speech Bubble Mobile */
-  .robot-character .speech-bubble,
-  .robot-speech {
-    position: absolute !important;
-    top: -46px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    white-space: nowrap !important;
+  /*
+   * Mobile speech bubble.
+   */
+  .robot-character .speech-bubble {
+    top: -4.5rem;
+    max-width: calc(100vw - 32px);
   }
 
-  /* 4. SYSTEM READY & BUTTON (Persis di Sebelah Kanan Robot) */
-  .intro-foreground,
-  .ui-wrapper,
-  .ui-container {
-    position: absolute !important;
-    left: clamp(112px, 31vw, 142px) !important; /* Sejajar di kanan robot */
-    bottom: clamp(30px, 5dvh, 55px) !important;
-    right: auto !important;
-    top: auto !important;
-    width: auto !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 8px !important;
-    z-index: 30 !important;
-  }
-
-  /* Text "SYSTEM READY" */
-  .system-ready-text,
-  .intro-foreground h2,
-  .intro-foreground p {
-    font-size: 11px !important;
-    letter-spacing: 0.18em !important;
-    color: #52525b !important; /* Muted zinc */
-    margin: 0 !important;
-    padding: 0 !important;
-    white-space: nowrap !important;
-    font-family: monospace !important;
-  }
-
-  /* Button [ ENTER EXPERIENCE ] */
-  .enter-experience,
-  .btn-enter-experience,
-  .intro-foreground button {
-    padding: 8px 14px !important;
-    font-size: 10.5px !important;
-    letter-spacing: 0.08em !important;
-    border-radius: 6px !important;
-    background-color: rgba(9, 9, 11, 0.85) !important;
-    border: 1px solid rgba(39, 39, 42, 0.8) !important;
-    color: #22d3ee !important; /* Cyan glow text */
-    white-space: nowrap !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
-    font-family: monospace !important;
-  }
-
-  /* 5. SKIP SEQUENCE (Kanan Atas) */
-  .skip-sequence,
-  .btn-skip-sequence {
-    position: absolute !important;
-    top: max(16px, env(safe-area-inset-top)) !important;
-    right: max(16px, env(safe-area-inset-right)) !important;
-    font-size: 10px !important;
-    letter-spacing: 0.15em !important;
-    color: #52525b !important;
-    z-index: 50 !important;
+  .robot-character .speech-bubble > div:first-child {
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
   }
 }
 
-/* ------------------------------------------
-   LAYAR HP KECIL (< 360px)
-   ------------------------------------------ */
-@media (max-width: 360px) {
-  .robot-character {
-    left: 8px !important;
-    bottom: 20px !important;
-  }
+        /*
+         * Very small phones.
+         *
+         * This prevents the robot from becoming too tall
+         * and keeps enough space between robot and controls.
+         */
+        @media (max-width: 380px) {
+          .robot-character {
+            bottom: 142px;
+          }
 
-  .robot-character svg,
-  .robot-svg {
-    width: 75px !important;
-  }
+          .robot-character.is-walking {
+            transform: translateX(
+              calc(-50% + 58px)
+            );
+          }
 
-  .intro-foreground,
-  .ui-wrapper {
-    left: 92px !important;
-    bottom: 20px !important;
-    gap: 6px !important;
-  }
+          .robot-svg {
+            width: 96px;
+            height: 110px;
+          }
 
-  .computer-terminal,
-  .terminal-wrapper {
-    right: 8px !important;
-    bottom: 28dvh !important;
-    width: 150px !important;
-  }
+          .computer-terminal {
+            right: 8px;
+            bottom: 66px;
+          }
 
-  .enter-experience,
-  .btn-enter-experience {
-    padding: 6px 10px !important;
-    font-size: 9.5px !important;
-  }
-}
+          .computer-screen {
+            width: 152px;
+            height: 108px;
+            padding: 9px;
+          }
 
-/* ------------------------------------------
-   TABLET PORTRAIT (640px - 1023px)
-   ------------------------------------------ */
-@media (min-width: 640px) and (max-width: 1023px) {
-  .robot-character {
-    left: 6% !important;
-    bottom: 70px !important;
-  }
+          .computer-base {
+            width: 96px;
+          }
 
-  .computer-terminal {
-    right: 6% !important;
-    bottom: 30dvh !important;
-    width: 220px !important;
-  }
+          .intro-foreground {
+            padding-bottom: 48px;
+          }
 
-  .intro-foreground {
-    left: 24% !important;
-    bottom: 70px !important;
-  }
-}
+          .enter-experience {
+            padding-left: 16px;
+            padding-right: 16px;
+            font-size: 10px;
+          }
 
-/* ------------------------------------------
-   SAFE AREA SUPPORT (iOS Notch & Home Indicator)
-   ------------------------------------------ */
-@supports (padding: env(safe-area-inset-bottom)) {
-  @media (max-width: 639px) {
-    .robot-character,
-    .intro-foreground,
-    .ui-wrapper {
-      bottom: calc(clamp(30px, 5dvh, 55px) + env(safe-area-inset-bottom)) !important;
-    }
+          .robot-speech {
+            top: -54px;
+          }
+        }
 
-    .computer-terminal {
-      bottom: calc(clamp(30dvh, 34dvh, 38dvh) + env(safe-area-inset-bottom)) !important;
-    }
-  }
-}
+        /*
+         * Tablet portrait.
+         *
+         * Only responsive positioning/sizing is adjusted.
+         * Desktop >= 1024px remains untouched.
+         */
+        @media (min-width: 640px) and (max-width: 1023px) {
+          .robot-character {
+            left: 18%;
+          }
+
+          .computer-terminal {
+            right: 8%;
+          }
+
+          .intro-foreground {
+            padding-bottom: 96px;
+          }
+        }
+
+        /*
+         * Safe-area support for mobile devices.
+         */
+        @supports (padding: env(safe-area-inset-bottom)) {
+          .intro-foreground {
+            padding-bottom:
+              max(
+                56px,
+                calc(
+                  56px +
+                  env(safe-area-inset-bottom)
+                )
+              );
+          }
+
+          .skip-sequence {
+            top:
+              max(
+                16px,
+                calc(
+                  16px +
+                  env(safe-area-inset-top)
+                )
+              );
+          }
+        }
       `}</style>
 
       {/* CAMERA RIG */}
@@ -624,13 +587,13 @@ export default function Intro({ onComplete }) {
               />
 
               <div
-                className={`robot-character absolute left-12 sm:left-32 bottom-20 transition-all duration-1000 ease-in-out flex flex-col items-center ${
+                className={`robot-character absolute left-3 sm:left-32 bottom-8 sm:bottom-20 transition-all duration-1000 ease-in-out flex flex-col items-center z-20 ${
                   phase === "WALKING"
-                    ? "is-mobile-walking translate-x-[180px] sm:translate-x-[240px]"
+                    ? "is-mobile-walking translate-x-4 sm:translate-x-[240px]"
                     : phase === "SEARCHING" ||
                         phase === "FOUND" ||
                         phase === "PORTAL"
-                      ? "is-mobile-target translate-x-[180px] sm:translate-x-[240px]"
+                      ? "is-mobile-target translate-x-4 sm:translate-x-[240px]"
                       : "translate-x-0"
                 }`}
               />
@@ -993,7 +956,7 @@ export default function Intro({ onComplete }) {
           phase !== "IDLE" ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
       >
-        <p className="intro-system-ready text-slate-500 text-xs mb-4 tracking-[0.2em] animate-pulse">
+        <p className="system-ready-text text-[11px] sm:text-xs tracking-widest text-zinc-500 font-mono">
           SYSTEM READY
         </p>
 
