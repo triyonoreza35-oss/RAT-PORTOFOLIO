@@ -5,8 +5,10 @@
 /* ============================================
    1. GLOBAL RESET & BASE STYLES
    ============================================ */
-html {
+html, body {
   scroll-behavior: smooth;
+  background-color: #07080C !important; /* Menghilangkan bocor warna putih di balik header */
+  color: #f8fafc;
 }
 
 /* Memastikan aplikasi mengambil lebar penuh secara responsif */
@@ -18,9 +20,15 @@ body {
 #root {
   width: 100%;
   min-height: 100vh;
-  min-height: 100dvh; /* Mencegah elemen terdesak/menumpuk akibat address bar HP */
+  min-height: 100dvh;
   margin: 0;
   padding: 0;
+  background-color: #07080C;
+}
+
+/* Hilangkan garis border putih keras pada top header di HP */
+header {
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
 }
 
 /* ============================================
