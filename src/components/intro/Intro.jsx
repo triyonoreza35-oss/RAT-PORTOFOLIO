@@ -373,41 +373,35 @@ export default function Intro({ onComplete }) {
    6. MOBILE INTRO SCENE OVERRIDES
    ============================================ */
 @media (max-width: 639px) {
-  /* 1. Naikkan posisi monitor sedikit agar tidak menempel dengan robot */
-  .computer-screen {
-    transform: translateY(-35px) scale(0.9) !important;
-  }
-
-  /* 2. Ukuran Robot disesuaikan agar proporsional di layar HP */
-  .robot-character svg {
-    width: 5.5rem !important;
-    height: 6.5rem !important;
-  }
-
-  /* 3. Posisi Robot saat IDLE -> KIRI BAWAH (Sesuai Foto 2) */
+  /* Posisi Awal Robot di HP (Tersisih ke kiri, tidak di tengah) */
   .robot-character {
-    left: 1rem !important;
-    bottom: 75px !important;
+    left: 1.25rem !important;
+    bottom: 160px !important;
     transform: translateX(0) !important;
   }
 
-  /* 4. Posisi Robot saat WALKING / TARGET -> KANAN BAWAH (Sesuai Foto 3) */
+  /* Saat robot berjalan / berhenti di target pada layar HP */
   .robot-character.is-mobile-walking,
   .robot-character.is-mobile-target {
-    /* Menggeser robot melintasi layar hingga ke pojok kanan */
-    transform: translateX(calc(100vw - 140px)) !important;
+    transform: translateX(80px) !important;
   }
 
-  /* 5. Balon Kata Robot di HP */
+  /* Ukuran Robot di HP */
+  .robot-character svg {
+    width: 6.5rem;
+    height: 7.5rem;
+  }
+
+  /* Balon Percakapan Robot di HP */
   .robot-character .speech-bubble {
-    top: -4rem !important;
-    left: 0 !important;
+    top: -4.5rem;
+    max-width: calc(100vw - 32px);
   }
 
-  /* 6. Tombol & Teks 'SISTEM SIAP' di Tengah Bawah (Sesuai Foto 2) */
+  /* Posisi Tombol & Teks Foreground (Turun ke paling bawah) */
   .intro-foreground {
-    bottom: 1.25rem !important;
-    padding-bottom: 0 !important;
+    justify-content: flex-end !important;
+    padding-bottom: 1.5rem !important;
   }
 }
 
