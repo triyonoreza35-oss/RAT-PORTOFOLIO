@@ -69,7 +69,10 @@ export default function Home({ isIntroActive = false }) {
       };
     };
 
-    const particles = Array.from({ length: PARTICLE_COUNT }, createParticle);
+    const particles = Array.from(
+      { length: PARTICLE_COUNT },
+      createParticle
+    );
 
     let mouseX = -9999;
     let mouseY = -9999;
@@ -164,7 +167,8 @@ export default function Home({ isIntroActive = false }) {
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
             ctx.strokeStyle = `rgba(167, 139, 250, ${
-              (1 - dist / CONNECTION_DIST) * (0.25 + depthFactor * 0.3)
+              (1 - dist / CONNECTION_DIST) *
+              (0.25 + depthFactor * 0.3)
             })`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
@@ -178,7 +182,9 @@ export default function Home({ isIntroActive = false }) {
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mouseX, mouseY);
-          ctx.strokeStyle = `rgba(34, 211, 238, ${1 - mDist / MOUSE_RADIUS})`;
+          ctx.strokeStyle = `rgba(34, 211, 238, ${
+            1 - mDist / MOUSE_RADIUS
+          })`;
           ctx.lineWidth = 0.8;
           ctx.stroke();
         }
@@ -199,14 +205,17 @@ export default function Home({ isIntroActive = false }) {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center bg-[#07080C] overflow-hidden pt-24 pb-28 sm:py-0"
+      className="relative min-h-screen flex items-center justify-center bg-[#07080C] overflow-hidden"
     >
       {/* Interactive Particle Network & Cyberpunk Grid Background */}
       <div
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none overflow-hidden cyber-grid layer-bg"
       >
-        <canvas ref={canvasRef} className="absolute inset-0 z-0 opacity-80" />
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 z-0 opacity-80"
+        />
 
         <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-purple-900/20 rounded-full blur-[150px]" />
 
@@ -216,11 +225,11 @@ export default function Home({ isIntroActive = false }) {
       {/* Main Content */}
       <div
         key={isIntroActive ? "intro-active" : "intro-done"}
-        className={`relative max-w-6xl mx-auto px-4 sm:px-6 w-full z-10 transition-opacity duration-700 ${
+        className={`relative max-w-6xl mx-auto px-6 w-full z-10 transition-opacity duration-700 ${
           isIntroActive ? "opacity-0" : "opacity-100 start-reveal"
         }`}
       >
-        <div className="relative max-w-2xl pl-4 sm:pl-10 border-l border-slate-800/80 layer-front transition-transform duration-200 ease-out">
+        <div className="relative max-w-2xl pl-6 sm:pl-10 border-l border-slate-800/80 layer-front transition-transform duration-200 ease-out">
           <span
             aria-hidden="true"
             className="absolute left-[-1px] top-4 h-32 w-[2px] bg-gradient-to-b from-cyan-400 via-purple-500 to-transparent shadow-[0_0_25px_rgba(167,139,250,0.9)] origin-top transition-transform duration-1000 ease-out"
@@ -230,7 +239,7 @@ export default function Home({ isIntroActive = false }) {
           />
 
           <h1
-            className="text-2xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-100 mb-2 scroll-reveal break-words"
+            className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-100 mb-2 scroll-reveal"
             style={{
               animationPlayState: isIntroActive ? "paused" : "running",
             }}
@@ -239,7 +248,7 @@ export default function Home({ isIntroActive = false }) {
           </h1>
 
           <h2
-            className="text-base sm:text-2xl md:text-3xl font-medium text-slate-400 mb-6 sm:mb-8 flex flex-wrap items-center gap-1.5 sm:gap-3 scroll-reveal"
+            className="text-lg sm:text-2xl md:text-3xl font-medium text-slate-400 mb-8 flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 scroll-reveal"
             style={{
               animationDelay: "0.2s",
               animationPlayState: isIntroActive ? "paused" : "running",

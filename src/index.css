@@ -261,3 +261,45 @@ body {
     animation: none !important;
   }
 }
+/* ============================================
+   6. MOBILE FIXES FOR HOME SECTION
+   ============================================ */
+@media (max-width: 639px) {
+  /* 1. Beri jarak aman atas & bawah agar tidak tertutup Header & Navbar HP */
+  #home {
+    padding-top: 5.5rem !important;    /* Jarak aman di bawah Header RAT */
+    padding-bottom: 6.5rem !important; /* Jarak aman di atas Navbar Bawah */
+    align-items: flex-start !important; /* Teks mulai dari atas, tidak dipaksa di tengah */
+  }
+
+  /* 2. Kurangi jarak indent garis vertikal kiri agar teks tidak terdorong ke kanan */
+  #home .max-w-2xl {
+    padding-left: 0.875rem !important;
+  }
+
+  /* 3. Kecilkan ukuran Nama ("Reza Aditya Triyono") agar pas dalam 2 baris */
+  #home h1 {
+    font-size: 1.75rem !important;  /* ~28px */
+    line-height: 2.25rem !important;
+    word-break: break-word !important;
+  }
+
+  /* 4. Kecilkan sub-judul "Web Developer & UI Enthusiast" */
+  #home h2 {
+    font-size: 1.125rem !important; /* ~18px */
+    margin-bottom: 1rem !important;
+  }
+
+  /* 5. Kecilkan teks paragraf deskripsi */
+  #home p {
+    font-size: 0.875rem !important; /* ~14px */
+    line-height: 1.5rem !important;
+  }
+
+  /* 6. Rapikan tombol Kontak & Unduh CV */
+  #home a {
+    padding-top: 0.625rem !important;
+    padding-bottom: 0.625rem !important;
+    font-size: 0.875rem !important;
+  }
+}
