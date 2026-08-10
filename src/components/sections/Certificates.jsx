@@ -9,7 +9,7 @@ const certificates = [
     issuer: "Academic & Professional Training",
     year: "2024",
     skills: "SQL • Database Design • Relational Data",
-    image: "/image/3.jpg",
+    image: "/image/3.webP",
     icon: Database,
   },
   {
@@ -17,7 +17,7 @@ const certificates = [
     issuer: "Badan Nasional Sertifikasi Profesi (BNSP)",
     year: "2025",
     skills: "System Analysis • UML • Documentation",
-    image: "/image/1.jpg",
+    image: "/image/2.webP",
     icon: Award,
   },
   {
@@ -25,7 +25,7 @@ const certificates = [
     issuer: "Online Learning Platform",
     year: "2023",
     skills: "Logic • Data Processing • Automation",
-    image: "/image/python.jpeg",
+    image: "/image/python.webP",
     icon: Code2,
   },
   {
@@ -33,7 +33,7 @@ const certificates = [
     issuer: "Cisco Networking Academy",
     year: "2024",
     skills: "Network Security • Threat Awareness",
-    image: "/image/2.jpg",
+    image: "/image/1.webP",
     icon: ShieldCheck,
   },
 ];
@@ -99,12 +99,7 @@ export default function Certificates() {
               <img
                 src={activeCert.image}
                 alt={activeCert.title}
-                className="
-                  w-full
-                  max-h-[65vh]
-                  object-contain
-                  rounded-xl
-                "
+                className="w-full max-h-[65vh] object-contain rounded-xl"
               />
             </div>
 
@@ -170,14 +165,10 @@ function CertificateCard({ cert, onClick }) {
         </div>
 
         <div>
-          <h3 className="text-slate-100 font-semibold mb-1">
-            {cert.title}
-          </h3>
+          <h3 className="text-slate-100 font-semibold mb-1">{cert.title}</h3>
           <p className="text-slate-400 text-sm">{cert.issuer}</p>
           <p className="text-slate-500 text-xs mb-2">{cert.year}</p>
-          <p className="text-xs font-medium text-[#A78BFA]">
-            {cert.skills}
-          </p>
+          <p className="text-xs font-medium text-[#A78BFA]">{cert.skills}</p>
 
           <span className="mt-3 inline-block text-xs text-slate-400 group-hover:text-[#A78BFA] transition">
             Klik untuk lihat sertifikat →

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import BottomNav from "./components/layout/BottomNav";
@@ -9,14 +10,9 @@ import Projects from "./components/sections/Projects";
 import Certificates from "./components/sections/Certificates";
 import Contact from "./components/sections/Contact";
 
-import { motion } from "framer-motion";
+import Intro from "./components/intro/Intro";
+import { motion, useReducedMotion } from "framer-motion";
 
-/**
- * Reusable animation for sections
- * - Fade in
- * - Slide up slightly
- * - Trigger once when in view
- */
 const sectionVariant = {
   hidden: { opacity: 0, y: 40 },
   visible: {
@@ -29,75 +25,104 @@ const sectionVariant = {
   },
 };
 
+const sectionVariantReduced = {
+  hidden: { opacity: 0, y: 0 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.1 },
+  },
+};
+
 function App() {
+  const shouldReduceMotion = useReducedMotion();
+  const activeVariant = shouldReduceMotion
+    ? sectionVariantReduced
+    : sectionVariant;
+
+  // Set ke useState(true) untuk testing tampilan,
+  // atau pakai logika sessionStorage untuk mode produksi
+  const [isIntroActive, setIsIntroActive] = useState(true);
+
+  const handleIntroComplete = () => {
+    setIsIntroActive(false);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("portfolio_intro_seen", "true");
+    }
+  };
+
   return (
     <>
-      <Navbar />
+      {/* Intro Modal (Hanya muncul jika belum pernah dilihat dalam 1 sesi) */}
+      {isIntroActive && <Intro onComplete={handleIntroComplete} />}
 
-      <main className="min-h-screen">
-        <motion.section
-          id="home"
-          variants={sectionVariant}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <Home />
-        </motion.section>
+      {/* Main Website Interface - Tetap di-render di background (Preloaded) */}
+      <div
+        className={
+          isIntroActive ? "overflow-hidden h-screen pointer-events-none" : ""
+        }
+      >
+        <Navbar />
 
-        <motion.section
-          id="about"
-          variants={sectionVariant}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <About />
-        </motion.section>
+        <main className="min-h-screen">
+          <section id="home">
+            <Home isIntroActive={isIntroActive} />
+          </section>
 
-        <motion.section
-          id="skills"
-          variants={sectionVariant}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <Skills />
-        </motion.section>
+          <motion.section
+            id="about"
+            variants={activeVariant}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <About />
+          </motion.section>
 
-        <motion.section
-          id="projects"
-          variants={sectionVariant}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <Projects />
-        </motion.section>
+          <motion.section
+            id="skills"
+            variants={activeVariant}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <Skills />
+          </motion.section>
 
-        <motion.section
-          id="certificates"
-          variants={sectionVariant}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <Certificates />
-        </motion.section>
+          <motion.section
+            id="projects"
+            variants={activeVariant}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <Projects />
+          </motion.section>
 
-        <motion.section
-          id="contact"
-          variants={sectionVariant}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <Contact />
-        </motion.section>
-      </main>
+          <motion.section
+            id="certificates"
+            variants={activeVariant}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <Certificates />
+          </motion.section>
 
-      <Footer />
-      <BottomNav />
+          <motion.section
+            id="contact"
+            variants={activeVariant}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <Contact />
+          </motion.section>
+        </main>
+
+        <Footer />
+        <BottomNav />
+      </div>
     </>
   );
 }
