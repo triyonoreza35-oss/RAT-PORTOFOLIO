@@ -5,30 +5,16 @@
 /* ============================================
    1. GLOBAL RESET & BASE STYLES
    ============================================ */
-html, body {
+html {
   scroll-behavior: smooth;
-  background-color: #07080C !important; /* Menghilangkan bocor warna putih di balik header */
-  color: #f8fafc;
 }
 
 /* Memastikan aplikasi mengambil lebar penuh secara responsif */
-body {
-  overflow-x: hidden;
-  width: 100%;
-}
-
 #root {
   width: 100%;
   min-height: 100vh;
-  min-height: 100dvh;
   margin: 0;
   padding: 0;
-  background-color: #07080C;
-}
-
-/* Hilangkan garis border putih keras pada top header di HP */
-header {
-  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
 }
 
 /* ============================================
@@ -267,67 +253,5 @@ header {
 
   .hero-glow {
     animation: none !important;
-  }
-}
-/* ============================================
-   6. MOBILE FIXES FOR HOME & HEADER SECTION
-   ============================================ */
-@media (max-width: 639px) {
-  /* 1. Header Atas: Beri efek kaca transparan agar scroll teks terlihat mulus */
-  header {
-    background-color: rgba(7, 8, 12, 0.85) !important;
-    backdrop-filter: blur(12px) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-  }
-
-  /* 2. Home Section: Posisikan konten tepat di tengah layar HP tanpa area kosong di bawah */
-  #home {
-    min-height: 100dvh !important;
-    padding-top: 5.1rem !important;    /* Ruang aman di bawah Header */
-    padding-bottom: 7.5rem !important; /* Ruang aman di atas Navbar Bawah */
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important; /* Memusatkan isi secara vertikal */
-    align-items: stretch !important;
-  }
-
-  /* 3. Atur indentasi & padding kiri agar garis ungu pas di pinggir */
-  #home .max-w-2xl {
-    padding-left: 1rem !important;
-    margin-top: auto !important;
-    margin-bottom: auto !important;
-  }
-
-  /* 4. Ukuran Nama "Reza Aditya Triyono" */
-  #home h1 {
-    font-size: 1.85rem !important; /* ~29px */
-    line-height: 2.25rem !important;
-    word-break: break-word !important;
-    margin-bottom: 0.5rem !important;
-  }
-
-  /* 5. Sub-judul "Web Developer & UI Enthusiast" */
-  #home h2 {
-    font-size: 1.1rem !important;
-    margin-bottom: 1.25rem !important;
-  }
-
-  /* 6. Paragraf Deskripsi & Kontras Teks */
-  #home p {
-    font-size: 0.875rem !important; /* 14px */
-    line-height: 1.5rem !important;
-    color: #cbd5e1 !important;     /* Warna lebih terang (slate-300) agar mudah dibaca */
-  }
-
-  #home .space-y-4 {
-    margin-bottom: 1.75rem !important;
-  }
-
-  /* 7. Tombol "Contact me" & "Unduh CV" */
-  #home a {
-    padding-top: 0.75rem !important;
-    padding-bottom: 0.75rem !important;
-    font-size: 0.875rem !important;
-    text-align: center !important;
   }
 }
