@@ -372,14 +372,10 @@ export default function Intro({ onComplete }) {
 
        @media (max-width: 639px) {
   .robot-character {
-    left: 50%;
-    bottom: clamp(170px, 28vh, 220px);
-
-    /*
-     * Initial position:
-     * center the robot horizontally.
-     */
-    transform: translateX(-50%);
+    /* Kunci robot di sisi KIRI, bukan di TENAGH (50%) */
+    left: 1rem; 
+    bottom: clamp(140px, 20vh, 180px);
+    transform: translateX(0);
   }
 
   /*
@@ -389,46 +385,23 @@ export default function Intro({ onComplete }) {
    * The transform is controlled entirely here so it
    * cannot conflict with Tailwind translate-x classes.
    */
-  .robot-character.is-mobile-walking {
-    transform:
-      translateX(
-        calc(
-          -50% +
-          clamp(55px, 16vw, 75px)
-        )
-      );
-  }
-
-  /*
-   * After reaching the computer, keep the robot there.
-   *
-   * This is important:
-   * WALKING -> SEARCHING -> FOUND -> PORTAL
-   * must NOT return the robot to its initial position.
-   */
+  .robot-character.is-mobile-walking,
   .robot-character.is-mobile-target {
-    transform:
-      translateX(
-        calc(
-          -50% +
-          clamp(55px, 16vw, 75px)
-        )
-      );
+    transform: translateX(70px);
   }
-
   /*
    * Keep the robot itself inside the viewport.
    */
   .robot-character svg {
-    width: 6.5rem;
-    height: 7.5rem;
+    width: 6rem;
+    height: 7rem;
   }
 
   /*
    * Mobile speech bubble.
    */
   .robot-character .speech-bubble {
-    top: -4.5rem;
+    top: -4rem;
     max-width: calc(100vw - 32px);
   }
 
@@ -583,18 +556,6 @@ export default function Intro({ onComplete }) {
               <div
                 className={`absolute inset-0 transition-opacity duration-700 bg-cyan-500/10 ${
                   phase === "SEARCHING" ? "opacity-100" : "opacity-0"
-                }`}
-              />
-
-              <div
-                className={`robot-character absolute left-3 sm:left-32 bottom-8 sm:bottom-20 transition-all duration-1000 ease-in-out flex flex-col items-center z-20 ${
-                  phase === "WALKING"
-                    ? "is-mobile-walking translate-x-4 sm:translate-x-[240px]"
-                    : phase === "SEARCHING" ||
-                        phase === "FOUND" ||
-                        phase === "PORTAL"
-                      ? "is-mobile-target translate-x-4 sm:translate-x-[240px]"
-                      : "translate-x-0"
                 }`}
               />
 
@@ -952,20 +913,19 @@ export default function Intro({ onComplete }) {
 
       {/* UI FOREGROUND LAYER */}
       <div
-        className={`intro-foreground absolute inset-0 flex flex-col items-center justify-end pb-24 sm:pb-32 z-50 pointer-events-auto transition-opacity duration-500 ${
+        className={`intro-foreground absolute inset-x-0 bottom-6 sm:bottom-12 flex flex-col items-center justify-end z-50 pointer-events-auto transition-opacity duration-500 ${
           phase !== "IDLE" ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
       >
-        <p className="system-ready-text text-[11px] sm:text-xs tracking-widest text-zinc-500 font-mono">
+        <p className="intro-system-ready text-slate-500 text-[10px] sm:text-xs mb-2 tracking-[0.2em] animate-pulse">
           SYSTEM READY
         </p>
 
         <button
           onClick={startExperience}
-          className="enter-experience group relative min-h-[44px] px-8 py-3 bg-[#12131C] border border-slate-700/50 hover:border-cyan-500/50 rounded text-cyan-500 text-sm tracking-widest overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)] focus:outline-none focus:ring-2 focus:ring-cyan-500/50 touch-manipulation"
+          className="enter-experience group relative min-h-[40px] px-6 py-2.5 bg-[#12131C] border border-slate-700/50 hover:border-cyan-500/50 rounded text-cyan-500 text-xs sm:text-sm tracking-widest overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)] focus:outline-none touch-manipulation"
         >
           <div className="absolute inset-0 bg-cyan-500/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-
           <span className="relative z-10">[ ENTER EXPERIENCE ]</span>
         </button>
       </div>
