@@ -1,23 +1,80 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import usePrefersReducedMotion from "../../hooks/usePrefersReducedMotion";
+import { useEffect, useRef, useState } from "react";
 
 const FIRST_PARAGRAPH =
   "Saya adalah pengembang web yang berdedikasi untuk menciptakan antarmuka yang bersih, berperforma tinggi, dan inklusif. Fokus saya adalah mengubah baris kode menjadi solusi digital yang bermakna.";
 const SECOND_PARAGRAPH =
   "Spesialisasi dalam membangun aplikasi web yang scalable, responsif, dan siap untuk kebutuhan dunia nyata.";
 
-export default function Home({ isIntroActive = false }) {
-  // Tetap panggil hook untuk menjaga ketersediaan preferensi
-  const systemPrefersReducedMotion = usePrefersReducedMotion();
+const ROLES = [
+  "Membangun Pengalaman Digital",
+  "Merancang Antarmuka Web Modern",
+  "Mengubah Ide Menjadi Website",
+  "Menciptakan Web yang Cepat & Menarik",
+];
 
-  // Memaksa animasi tetap berjalan sesuai konfigurasi awal
-  const prefersReducedMotion = false;
+export default function Home({ isIntroActive = false }) {
+  // State Typing Effect
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [canStartTyping, setCanStartTyping] = useState(false);
 
   const canvasRef = useRef(null);
 
-  // Deep-Space Particle Field Animation Loop & Cleanup
+  // 1. Pemicu start typing setelah intro selesai (jeda 300ms agar pas dengan CSS scroll-reveal)
+  useEffect(() => {
+    if (isIntroActive) {
+      setCanStartTyping(false);
+      return;
+    }
+
+    const startTimeout = setTimeout(() => {
+      setCanStartTyping(true);
+    }, 300);
+
+    return () => clearTimeout(startTimeout);
+  }, [isIntroActive]);
+
+  // 2. Typing Effect Logic Utama
+  useEffect(() => {
+    if (!canStartTyping) return;
+
+    const currentFullText = ROLES[roleIndex];
+    let timer;
+
+    if (!isDeleting) {
+      // Mode Mengetik
+      if (displayText.length < currentFullText.length) {
+        timer = setTimeout(() => {
+          setDisplayText(currentFullText.slice(0, displayText.length + 1));
+        }, 70); // Typing speed: 70ms
+      } else {
+        // Selesai Mengetik: Jeda 1800ms
+        timer = setTimeout(() => {
+          setIsDeleting(true);
+        }, 1800);
+      }
+    } else {
+      // Mode Menghapus
+      if (displayText.length > 0) {
+        timer = setTimeout(() => {
+          setDisplayText(currentFullText.slice(0, displayText.length - 1));
+        }, 40); // Delete speed: 40ms
+      } else {
+        // Selesai Menghapus: Jeda 400ms lalu ganti kalimat berikutnya
+        timer = setTimeout(() => {
+          setIsDeleting(false);
+          setRoleIndex((prev) => (prev + 1) % ROLES.length);
+        }, 400);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, roleIndex, canStartTyping]);
+
+  // Particle Canvas Animation
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -27,7 +84,6 @@ export default function Home({ isIntroActive = false }) {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    // --- Tunables -----------------------------------------------------
     const PARTICLE_COUNT = 70;
     const MIN_SPEED = 0.15;
     const MAX_SPEED = 0.45;
@@ -38,7 +94,6 @@ export default function Home({ isIntroActive = false }) {
     const MOUSE_RADIUS = 140;
     const MOUSE_FORCE = 0.9;
     const EDGE_MARGIN = 30;
-    // --------------------------------------------------------------------
 
     const randRange = (min, max) => min + Math.random() * (max - min);
 
@@ -68,10 +123,7 @@ export default function Home({ isIntroActive = false }) {
       };
     };
 
-    const particles = Array.from(
-      { length: PARTICLE_COUNT },
-      createParticle
-    );
+    const particles = Array.from({ length: PARTICLE_COUNT }, createParticle);
 
     let mouseX = -9999;
     let mouseY = -9999;
@@ -81,9 +133,7 @@ export default function Home({ isIntroActive = false }) {
       mouseY = e.clientY;
     };
 
-    window.addEventListener("mousemove", handleCanvasMouseMove, {
-      passive: true,
-    });
+    window.addEventListener("mousemove", handleCanvasMouseMove, { passive: true });
 
     const handleResize = () => {
       width = canvas.width = window.innerWidth;
@@ -92,7 +142,6 @@ export default function Home({ isIntroActive = false }) {
 
     window.addEventListener("resize", handleResize);
 
-    // --- Full animated render loop ---
     let lastTime = performance.now();
 
     const render = (now) => {
@@ -199,25 +248,21 @@ export default function Home({ isIntroActive = false }) {
       window.removeEventListener("mousemove", handleCanvasMouseMove);
       window.removeEventListener("resize", handleResize);
     };
-  }, [prefersReducedMotion]);
+  }, []);
 
   return (
     <section
       id="home"
       className="relative min-h-screen flex items-center justify-center bg-[#07080C] overflow-hidden py-12 xs:py-16 md:py-20"
     >
-      {/* Interactive Particle Network & Cyberpunk Grid Background */}
+      {/* Interactive Particle Network */}
       <div
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none overflow-hidden cyber-grid layer-bg"
       >
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 z-0 opacity-80"
-        />
+        <canvas ref={canvasRef} className="absolute inset-0 z-0 opacity-80" />
 
         <div className="absolute -top-40 -left-40 w-[300px] xs:w-[400px] md:w-[600px] h-[300px] xs:h-[400px] md:h-[600px] bg-purple-900/20 rounded-full blur-[100px] md:blur-[150px]" />
-
         <div className="absolute -bottom-40 -right-40 w-[300px] xs:w-[400px] md:w-[600px] h-[300px] xs:h-[400px] md:h-[600px] bg-cyan-900/20 rounded-full blur-[100px] md:blur-[150px]" />
       </div>
 
@@ -248,21 +293,20 @@ export default function Home({ isIntroActive = false }) {
             Reza Aditya Triyono
           </h1>
 
-          {/* Subtitle / Role */}
+          {/* Subtitle / Role (Typing Effect) */}
           <h2
-            className="text-sm xs:text-base sm:text-lg md:text-2xl lg:text-3xl font-medium text-slate-400 mb-6 xs:mb-8 flex flex-wrap items-center gap-1.5 xs:gap-2 md:gap-3 scroll-reveal"
+            className="text-sm xs:text-base sm:text-lg md:text-2xl lg:text-3xl font-medium text-slate-400 mb-6 xs:mb-8 flex items-center min-h-[2em] scroll-reveal"
             style={{
               animationDelay: "0.2s",
               animationPlayState: isIntroActive ? "paused" : "running",
             }}
           >
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-mono">
-              Web Developer
+            <span className="inline-flex items-center text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-mono tracking-tight">
+              {displayText}
+
+              {/* Cursor Cyan-400 */}
+              <span className="inline-block w-[2px] sm:w-[3px] h-[0.85em] bg-cyan-400 ml-1 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,211,238,0.9)]" />
             </span>
-
-            <span className="text-slate-600">&amp;</span>
-
-            <span className="text-slate-300">UI Enthusiast</span>
           </h2>
 
           {/* Description Paragraphs */}
@@ -275,7 +319,6 @@ export default function Home({ isIntroActive = false }) {
             }}
           >
             <p>{FIRST_PARAGRAPH}</p>
-
             <p className="text-slate-500 text-[11px] xs:text-xs md:text-sm lg:text-base">
               {SECOND_PARAGRAPH}
             </p>
@@ -294,7 +337,6 @@ export default function Home({ isIntroActive = false }) {
               className="group relative inline-flex justify-center items-center px-6 xs:px-7 md:px-8 py-3 xs:py-3.5 rounded-lg bg-slate-100 text-slate-900 font-semibold text-xs xs:text-sm md:text-base tracking-wide overflow-hidden transition-transform duration-150 ease-out shadow-lg touch-manipulation"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
               <span className="relative z-10 group-hover:text-white transition-colors duration-300">
                 Contact me
               </span>

@@ -1,5 +1,26 @@
-import { Menu, X } from "lucide-react";
+"use client";
+
 import { useEffect, useState } from "react";
+import { 
+  Menu, 
+  X, 
+  Home, 
+  User, 
+  Code2, 
+  Briefcase, 
+  Award, 
+  Mail 
+} from "lucide-react";
+
+// Pemetaan icon untuk masing-masing menu item
+const menuIcons = {
+  home: Home,
+  about: User,
+  skills: Code2,
+  projects: Briefcase,
+  certificates: Award,
+  contact: Mail,
+};
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -52,12 +73,14 @@ export default function Navbar() {
       className={`
         fixed top-0 w-full z-50
         transition-all duration-300
-        ${scrolled
-          ? "bg-slate-950/95 backdrop-blur border-b border-slate-800 shadow-lg shadow-black/30"
-          : "bg-slate-950/70 backdrop-blur border-b border-slate-800"}
+        ${
+          scrolled
+            ? "bg-slate-950/80 backdrop-blur-md border-b border-slate-800/80 shadow-lg shadow-black/40 py-3"
+            : "bg-transparent py-4"
+        }
       `}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center group cursor-pointer">
           <div className="relative">
@@ -66,7 +89,7 @@ export default function Navbar() {
               src="/image/logo.jpeg"
               alt="Logo RAT"
               className="
-                relative h-9 sm:h-11 w-auto object-contain rounded-xl
+                relative h-9 sm:h-10 w-auto object-contain rounded-xl
                 transition-all duration-500
                 animate-logo-pulse
                 group-hover:animate-none
@@ -77,36 +100,34 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Desktop Menu */}
-        <ul className="hidden md:flex gap-8 text-sm font-medium">
+        {/* Desktop Menu - Floating Pill Navigation */}
+        <ul className="hidden md:flex items-center gap-1 p-1.5 rounded-full bg-slate-900/80 border border-slate-800/90 backdrop-blur-md shadow-xl shadow-black/30">
           {menus.map((item) => {
             const id = item.toLowerCase();
             const isActive = active === id;
+            const Icon = menuIcons[id] || Home;
 
             return (
               <li key={item} className="relative">
                 <a
                   href={`#${id}`}
                   className={`
-                    relative px-1 py-2
-                    transition-all duration-200
-                    ${isActive
-                      ? "text-violet-400"
-                      : "text-slate-300 hover:text-violet-300"}
-                    hover:-translate-y-0.5
+                    relative flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold
+                    transition-all duration-300 ease-out select-none
+                    ${
+                      isActive
+                        ? "bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.25)]"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
+                    }
                   `}
                 >
-                  {item}
-
-                  {/* underline indicator */}
-                  <span
-                    className={`
-                      absolute left-0 -bottom-0.5 h-[2px] w-full
-                      bg-violet-400 rounded-full
-                      transition-all duration-300 origin-left
-                      ${isActive ? "scale-x-100" : "scale-x-0"}
-                    `}
+                  <Icon
+                    size={15}
+                    className={`transition-all duration-300 ${
+                      isActive ? "scale-110 text-cyan-400" : "opacity-70"
+                    }`}
                   />
+                  <span className="tracking-wide">{item}</span>
                 </a>
               </li>
             );
