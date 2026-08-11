@@ -9,11 +9,10 @@ const SECOND_PARAGRAPH =
   "Spesialisasi dalam membangun aplikasi web yang scalable, responsif, dan siap untuk kebutuhan dunia nyata.";
 
 export default function Home({ isIntroActive = false }) {
-  // Tetap panggil hook, namun karena ingin selalu animated, kita paksa nilai reduced motion ke false
-  // (Atau jika ingin tetap menghormati setting OS, biarkan systemPrefersReducedMotion mengatur, tapi animasi scroll-reveal tetap aktif).
+  // Tetap panggil hook untuk menjaga ketersediaan preferensi
   const systemPrefersReducedMotion = usePrefersReducedMotion();
 
-  // Jika ingin benar-benar selalu animated tanpa peduli setting OS:
+  // Memaksa animasi tetap berjalan sesuai konfigurasi awal
   const prefersReducedMotion = false;
 
   const canvasRef = useRef(null);
@@ -205,7 +204,7 @@ export default function Home({ isIntroActive = false }) {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center bg-[#07080C] overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center bg-[#07080C] overflow-hidden py-12 xs:py-16 md:py-20"
     >
       {/* Interactive Particle Network & Cyberpunk Grid Background */}
       <div
@@ -217,29 +216,31 @@ export default function Home({ isIntroActive = false }) {
           className="absolute inset-0 z-0 opacity-80"
         />
 
-        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-purple-900/20 rounded-full blur-[150px]" />
+        <div className="absolute -top-40 -left-40 w-[300px] xs:w-[400px] md:w-[600px] h-[300px] xs:h-[400px] md:h-[600px] bg-purple-900/20 rounded-full blur-[100px] md:blur-[150px]" />
 
-        <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] bg-cyan-900/20 rounded-full blur-[150px]" />
+        <div className="absolute -bottom-40 -right-40 w-[300px] xs:w-[400px] md:w-[600px] h-[300px] xs:h-[400px] md:h-[600px] bg-cyan-900/20 rounded-full blur-[100px] md:blur-[150px]" />
       </div>
 
       {/* Main Content */}
       <div
         key={isIntroActive ? "intro-active" : "intro-done"}
-        className={`relative max-w-6xl mx-auto px-6 w-full z-10 transition-opacity duration-700 ${
+        className={`relative max-w-6xl mx-auto px-4 xs:px-6 md:px-10 w-full z-10 transition-opacity duration-700 ${
           isIntroActive ? "opacity-0" : "opacity-100 start-reveal"
         }`}
       >
-        <div className="relative max-w-2xl pl-6 sm:pl-10 border-l border-slate-800/80 layer-front transition-transform duration-200 ease-out">
+        <div className="relative max-w-2xl pl-4 xs:pl-6 md:pl-10 border-l border-slate-800/80 layer-front transition-transform duration-200 ease-out">
+          {/* Neon Accent Bar */}
           <span
             aria-hidden="true"
-            className="absolute left-[-1px] top-4 h-32 w-[2px] bg-gradient-to-b from-cyan-400 via-purple-500 to-transparent shadow-[0_0_25px_rgba(167,139,250,0.9)] origin-top transition-transform duration-1000 ease-out"
+            className="absolute left-[-1px] top-2 xs:top-4 h-24 xs:h-32 w-[2px] bg-gradient-to-b from-cyan-400 via-purple-500 to-transparent shadow-[0_0_25px_rgba(167,139,250,0.9)] origin-top transition-transform duration-1000 ease-out"
             style={{
               transform: isIntroActive ? "scaleY(0)" : "scaleY(1)",
             }}
           />
 
+          {/* Title / Name */}
           <h1
-            className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-100 mb-2 scroll-reveal"
+            className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-100 mb-2 scroll-reveal leading-tight"
             style={{
               animationPlayState: isIntroActive ? "paused" : "running",
             }}
@@ -247,8 +248,9 @@ export default function Home({ isIntroActive = false }) {
             Reza Aditya Triyono
           </h1>
 
+          {/* Subtitle / Role */}
           <h2
-            className="text-lg sm:text-2xl md:text-3xl font-medium text-slate-400 mb-8 flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 scroll-reveal"
+            className="text-sm xs:text-base sm:text-lg md:text-2xl lg:text-3xl font-medium text-slate-400 mb-6 xs:mb-8 flex flex-wrap items-center gap-1.5 xs:gap-2 md:gap-3 scroll-reveal"
             style={{
               animationDelay: "0.2s",
               animationPlayState: isIntroActive ? "paused" : "running",
@@ -263,8 +265,9 @@ export default function Home({ isIntroActive = false }) {
             <span className="text-slate-300">UI Enthusiast</span>
           </h2>
 
+          {/* Description Paragraphs */}
           <div
-            className="space-y-4 font-serif tracking-wide text-slate-300 text-base sm:text-lg leading-relaxed max-w-xl mb-12 scroll-reveal"
+            className="space-y-3 xs:space-y-4 tracking-wide text-slate-300 text-xs xs:text-sm md:text-base lg:text-lg leading-relaxed max-w-xl mb-8 xs:mb-10 md:mb-12 scroll-reveal"
             style={{
               fontFamily: "'Libre Baskerville', serif",
               animationDelay: "0.4s",
@@ -273,13 +276,14 @@ export default function Home({ isIntroActive = false }) {
           >
             <p>{FIRST_PARAGRAPH}</p>
 
-            <p className="text-slate-500 text-sm sm:text-base">
+            <p className="text-slate-500 text-[11px] xs:text-xs md:text-sm lg:text-base">
               {SECOND_PARAGRAPH}
             </p>
           </div>
 
+          {/* Call-to-Action Buttons */}
           <div
-            className="flex flex-col sm:flex-row gap-5 scroll-reveal"
+            className="flex flex-col xs:flex-row gap-3 xs:gap-4 md:gap-5 scroll-reveal"
             style={{
               animationDelay: "0.6s",
               animationPlayState: isIntroActive ? "paused" : "running",
@@ -287,7 +291,7 @@ export default function Home({ isIntroActive = false }) {
           >
             <a
               href="#contact"
-              className="group relative inline-flex justify-center items-center px-8 py-3.5 rounded-lg bg-slate-100 text-slate-900 font-semibold tracking-wide overflow-hidden transition-transform duration-150 ease-out shadow-lg"
+              className="group relative inline-flex justify-center items-center px-6 xs:px-7 md:px-8 py-3 xs:py-3.5 rounded-lg bg-slate-100 text-slate-900 font-semibold text-xs xs:text-sm md:text-base tracking-wide overflow-hidden transition-transform duration-150 ease-out shadow-lg touch-manipulation"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
@@ -299,7 +303,7 @@ export default function Home({ isIntroActive = false }) {
             <a
               href="/cv/CV.pdf"
               download
-              className="group inline-flex justify-center items-center px-8 py-3.5 rounded-lg border border-slate-700/80 bg-slate-900/50 text-slate-300 font-medium tracking-wide transition-all hover:bg-slate-800 hover:border-purple-500/50 hover:text-white"
+              className="group inline-flex justify-center items-center px-6 xs:px-7 md:px-8 py-3 xs:py-3.5 rounded-lg border border-slate-700/80 bg-slate-900/50 text-slate-300 font-medium text-xs xs:text-sm md:text-base tracking-wide transition-all hover:bg-slate-800 hover:border-purple-500/50 hover:text-white touch-manipulation"
             >
               Unduh CV
             </a>

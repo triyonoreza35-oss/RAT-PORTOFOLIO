@@ -162,12 +162,10 @@ export default function Intro({ onComplete }) {
         ? "text-cyan-300 drop-shadow-[0_0_8px_rgba(34,211,238,1)]"
         : "text-cyan-400 drop-shadow-[0_0_4px_rgba(34,211,238,0.8)]";
 
-  const isWalking = phase === "WALKING";
-
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[99999] bg-[#090A0F] select-none overflow-hidden overflow-x-hidden transition-opacity duration-700 font-mono opacity-100"
+      className="fixed inset-0 z-[99999] bg-[#090A0F] select-none overflow-hidden transition-opacity duration-700 font-mono opacity-100"
       style={{
         "--mx": 0,
         "--my": 0,
@@ -206,312 +204,75 @@ export default function Intro({ onComplete }) {
         }
 
         @keyframes breathe {
-          0% {
-            transform: translateY(0px);
-          }
-
-          100% {
-            transform: translateY(-4px);
-          }
+          0% { transform: translateY(0px); }
+          100% { transform: translateY(-4px); }
         }
 
         @keyframes walk {
-          0% {
-            transform: translateY(0px) rotate(1deg);
-          }
-
-          100% {
-            transform: translateY(-6px) rotate(-1deg);
-          }
+          0% { transform: translateY(0px) rotate(1deg); }
+          100% { transform: translateY(-6px) rotate(-1deg); }
         }
 
         @keyframes bounce-cheer {
-          0%,
-          100% {
-            transform: translateY(0px);
-          }
-
-          50% {
-            transform: translateY(-6px);
-          }
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-6px); }
         }
 
         .look-at-mouse {
-          transform:
-            translate(
-              calc(var(--mx) * 4px),
-              calc(var(--my) * 3px)
-            );
+          transform: translate(calc(var(--mx) * 4px), calc(var(--my) * 3px));
           transition: transform 0.1s ease-out;
         }
 
-        /* ==========================================
-           ARM & HAND WAVE
-           ========================================== */
-
+        /* ARM ANIMATIONS */
         @keyframes raise-shoulder {
-          0% {
-            transform: rotate(0deg);
-          }
-
-          15% {
-            transform: rotate(-30deg);
-          }
-
-          85% {
-            transform: rotate(-30deg);
-          }
-
-          100% {
-            transform: rotate(0deg);
-          }
+          0% { transform: rotate(0deg); }
+          15%, 85% { transform: rotate(-30deg); }
+          100% { transform: rotate(0deg); }
         }
 
         @keyframes wave-hand {
-          0% {
-            transform: rotate(0deg);
-          }
-
-          15% {
-            transform: rotate(0deg);
-          }
-
-          25% {
-            transform: rotate(-55deg);
-          }
-
-          40% {
-            transform: rotate(-70deg);
-          }
-
-          55% {
-            transform: rotate(-45deg);
-          }
-
-          70% {
-            transform: rotate(-70deg);
-          }
-
-          85% {
-            transform: rotate(-45deg);
-          }
-
-          95% {
-            transform: rotate(0deg);
-          }
-
-          100% {
-            transform: rotate(0deg);
-          }
+          0%, 15% { transform: rotate(0deg); }
+          25% { transform: rotate(-55deg); }
+          40% { transform: rotate(-70deg); }
+          55% { transform: rotate(-45deg); }
+          70% { transform: rotate(-70deg); }
+          85% { transform: rotate(-45deg); }
+          95%, 100% { transform: rotate(0deg); }
         }
 
-        .welcome-shoulder {
-          transform-origin: 108px 90px;
-        }
-
-        .welcome-arm-anim {
-          animation:
-            raise-shoulder
-            3.3s
-            ease-in-out
-            forwards;
-        }
-
+        .welcome-shoulder { transform-origin: 108px 90px; }
+        .welcome-arm-anim { animation: raise-shoulder 3.3s ease-in-out forwards; }
         .welcome-hand-anim {
           transform-origin: 118px 95px;
-          animation:
-            wave-hand
-            3.3s
-            ease-in-out
-            forwards;
+          animation: wave-hand 3.3s ease-in-out forwards;
         }
 
         @keyframes walk-arm-left {
-          0% {
-            transform: rotate(0deg);
-          }
-
-          100% {
-            transform: rotate(25deg);
-          }
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(25deg); }
         }
 
         @keyframes walk-arm-right {
-          0% {
-            transform: rotate(0deg);
-          }
-
-          100% {
-            transform: rotate(-25deg);
-          }
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(-25deg); }
         }
 
         @keyframes bubble-float {
-          0%,
-          100% {
-            transform: translateY(0px);
-          }
-
-          50% {
-            transform: translateY(-4px);
-          }
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-4px); }
         }
 
         .speech-bubble {
-          animation:
-            bubble-float
-            2s
-            ease-in-out
-            infinite;
+          animation: bubble-float 2s ease-in-out infinite;
         }
 
-        /* ==========================================
-           MOBILE RESPONSIVE ONLY
-           Desktop rules above remain unchanged.
-           ========================================== */
-/* ============================================
-   6. MOBILE INTRO SCENE OVERRIDES
-   ============================================ */
-@media (max-width: 639px) {
-  /* Posisi Awal Robot di HP (Tersisih ke kiri, tidak di tengah) */
-  .robot-character {
-    left: 1.25rem !important;
-    bottom: 160px !important;
-    transform: translateX(0) !important;
-  }
-
-  /* Saat robot berjalan / berhenti di target pada layar HP */
-  .robot-character.is-mobile-walking,
-  .robot-character.is-mobile-target {
-    transform: translateX(80px) !important;
-  }
-
-  /* Ukuran Robot di HP */
-  .robot-character svg {
-    width: 6.5rem;
-    height: 7.5rem;
-  }
-
-  /* Balon Percakapan Robot di HP */
-  .robot-character .speech-bubble {
-    top: -4.5rem;
-    max-width: calc(100vw - 32px);
-  }
-
-  /* Posisi Tombol & Teks Foreground (Turun ke paling bawah) */
-  .intro-foreground {
-    justify-content: flex-end !important;
-    padding-bottom: 1.5rem !important;
-  }
-}
-
-  .robot-character .speech-bubble > div:first-child {
-    padding-left: 0.625rem;
-    padding-right: 0.625rem;
-    padding-top: 0.375rem;
-    padding-bottom: 0.375rem;
-    font-size: 0.6875rem;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-  }
-}
-
-        /*
-         * Very small phones.
-         *
-         * This prevents the robot from becoming too tall
-         * and keeps enough space between robot and controls.
-         */
-        @media (max-width: 380px) {
-          .robot-character {
-            bottom: 142px;
-          }
-
-          .robot-character.is-walking {
-            transform: translateX(
-              calc(-50% + 58px)
-            );
-          }
-
-          .robot-svg {
-            width: 96px;
-            height: 110px;
-          }
-
-          .computer-terminal {
-            right: 8px;
-            bottom: 66px;
-          }
-
-          .computer-screen {
-            width: 152px;
-            height: 108px;
-            padding: 9px;
-          }
-
-          .computer-base {
-            width: 96px;
-          }
-
-          .intro-foreground {
-            padding-bottom: 48px;
-          }
-
-          .enter-experience {
-            padding-left: 16px;
-            padding-right: 16px;
-            font-size: 10px;
-          }
-
-          .robot-speech {
-            top: -54px;
-          }
-        }
-
-        /*
-         * Tablet portrait.
-         *
-         * Only responsive positioning/sizing is adjusted.
-         * Desktop >= 1024px remains untouched.
-         */
-        @media (min-width: 640px) and (max-width: 1023px) {
-          .robot-character {
-            left: 18%;
-          }
-
-          .computer-terminal {
-            right: 8%;
-          }
-
-          .intro-foreground {
-            padding-bottom: 96px;
-          }
-        }
-
-        /*
-         * Safe-area support for mobile devices.
-         */
+        /* SAFE-AREA & ADJUSTMENTS */
         @supports (padding: env(safe-area-inset-bottom)) {
           .intro-foreground {
-            padding-bottom:
-              max(
-                56px,
-                calc(
-                  56px +
-                  env(safe-area-inset-bottom)
-                )
-              );
+            padding-bottom: max(3rem, calc(3rem + env(safe-area-inset-bottom)));
           }
-
           .skip-sequence {
-            top:
-              max(
-                16px,
-                calc(
-                  16px +
-                  env(safe-area-inset-top)
-                )
-              );
+            top: max(1rem, calc(1rem + env(safe-area-inset-top)));
           }
         }
       `}</style>
@@ -522,12 +283,10 @@ export default function Intro({ onComplete }) {
           phase === "PORTAL" ? "camera-push" : ""
         }`}
       >
-        {/* Deep Background */}
+        {/* Background Radial Glow */}
         <div
           className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.15)_0%,transparent_60%)]"
-          style={{
-            transform: "translateZ(-500px) scale(2)",
-          }}
+          style={{ transform: "translateZ(-500px) scale(2)" }}
         />
 
         {/* Floor Grid */}
@@ -538,16 +297,15 @@ export default function Intro({ onComplete }) {
           }}
         />
 
-        {/* Main Environment & Computer */}
+        {/* Main Environment Container */}
         <div
           className="relative w-full max-w-3xl h-[400px] flex items-center justify-center"
-          style={{
-            transform: "translateZ(0px)",
-          }}
+          style={{ transform: "translateZ(0px)" }}
         >
-          <div className="computer-terminal absolute right-8 sm:right-24 bottom-12 flex flex-col items-center z-10 shadow-2xl">
+          {/* Computer Terminal */}
+          <div className="computer-terminal absolute right-4 xs:right-8 md:right-16 lg:right-24 bottom-12 flex flex-col items-center z-10 shadow-2xl">
             <div
-              className={`computer-screen relative w-48 sm:w-56 h-32 sm:h-36 bg-[#12131C] border-2 border-slate-700/80 rounded-lg p-3 flex flex-col justify-between overflow-hidden transition-all duration-700 ${
+              className={`computer-screen relative w-40 xs:w-48 md:w-56 h-28 xs:h-32 md:h-36 bg-[#12131C] border-2 border-slate-700/80 rounded-lg p-2.5 xs:p-3 flex flex-col justify-between overflow-hidden transition-all duration-700 ${
                 phase === "PORTAL"
                   ? "border-purple-400 shadow-[0_0_100px_rgba(167,139,250,1)]"
                   : "shadow-[0_0_30px_rgba(0,0,0,0.8)]"
@@ -560,24 +318,12 @@ export default function Intro({ onComplete }) {
               />
 
               <div
-                className={`robot-character absolute left-12 sm:left-32 bottom-20 transition-all duration-1000 ease-in-out flex flex-col items-center ${
-                  phase === "WALKING"
-                    ? "is-mobile-walking translate-x-[180px] sm:translate-x-[240px]"
-                    : phase === "SEARCHING" ||
-                        phase === "FOUND" ||
-                        phase === "PORTAL"
-                      ? "is-mobile-target translate-x-[180px] sm:translate-x-[240px]"
-                      : "translate-x-0"
-                }`}
-              />
-
-              <div
-                className={`relative z-10 text-[10px] sm:text-xs space-y-1 transition-opacity ${
+                className={`relative z-10 text-[9px] xs:text-[10px] md:text-xs space-y-1 transition-opacity ${
                   phase === "PORTAL" ? "opacity-0" : "opacity-100"
                 }`}
               >
-                <div className="flex items-center justify-between border-b border-slate-700/50 pb-1 text-[9px] text-slate-400">
-                  <span>PORTFOLIO_Reza Aditya</span>
+                <div className="flex items-center justify-between border-b border-slate-700/50 pb-1 text-[8px] xs:text-[9px] text-slate-400">
+                  <span>PORTFOLIO_Reza</span>
 
                   <span
                     className={`w-1.5 h-1.5 rounded-full ${
@@ -601,9 +347,7 @@ export default function Intro({ onComplete }) {
                 ) : phase === "SEARCHING" ? (
                   <div className="space-y-1 mt-1 text-cyan-300">
                     <p>&gt; SYS_WAKE: OK</p>
-
                     <p className="animate-pulse">&gt; SCANNING NETWORK...</p>
-
                     <div className="w-full h-1 bg-slate-800 mt-2 rounded overflow-hidden">
                       <div className="h-full bg-cyan-400 animate-[pulse_1s_ease-in-out_infinite] w-3/4" />
                     </div>
@@ -611,7 +355,6 @@ export default function Intro({ onComplete }) {
                 ) : (
                   <div className="space-y-1 mt-1 font-bold">
                     <p className="text-cyan-400">&gt; DATA COMPILED</p>
-
                     <p className="text-purple-300 animate-bounce">
                       &gt; TARGET FOUND ✓
                     </p>
@@ -620,37 +363,35 @@ export default function Intro({ onComplete }) {
               </div>
             </div>
 
-            <div className="w-12 h-6 bg-slate-800 border-x border-slate-700" />
-
-            <div className="computer-base w-32 h-2 bg-slate-700 rounded-full shadow-lg" />
+            <div className="w-10 xs:w-12 h-5 xs:h-6 bg-slate-800 border-x border-slate-700" />
+            <div className="computer-base w-28 xs:w-32 h-2 bg-slate-700 rounded-full shadow-lg" />
           </div>
         </div>
 
         {/* Robot Character Layer */}
         <div
           className="absolute inset-0 flex items-center justify-center pointer-events-none"
-          style={{
-            transform: "translateZ(100px)",
-          }}
+          style={{ transform: "translateZ(100px)" }}
         >
           <div
-            className={`absolute left-12 sm:left-32 bottom-20 transition-all duration-1000 ease-in-out flex flex-col items-center ${
+            className={`absolute left-10 xs:left-12 md:left-20 lg:left-32 bottom-20 transition-all duration-1000 ease-in-out flex flex-col items-center ${
               phase === "IDLE" || isGreeting
                 ? "translate-x-0"
-                : "translate-x-[180px] sm:translate-x-[240px]"
+                : "translate-x-[120px] xs:translate-x-[160px] md:translate-x-[220px] lg:translate-x-[240px]"
             }`}
           >
-            {/* Speech Bubble during Greeting */}
+            {/* Speech Bubble */}
             {isGreeting && (
-              <div className="robot-speech absolute -top-20 z-30 speech-bubble">
-                <div className="robot-speech-content px-3 py-1.5 bg-[#12131C]/90 border border-cyan-500/60 rounded-lg shadow-[0_0_15px_rgba(34,211,238,0.3)] text-cyan-300 text-xs tracking-wider flex items-center space-x-1.5 backdrop-blur-sm whitespace-nowrap">
+              <div className="robot-speech absolute -top-14 xs:-top-16 md:-top-20 z-30 speech-bubble -left-2 sm:left-auto">
+                <div className="px-2.5 py-1 xs:px-3 xs:py-1.5 bg-[#12131C]/90 border border-cyan-500/60 rounded-lg shadow-[0_0_15px_rgba(34,211,238,0.3)] text-cyan-300 text-[10px] xs:text-xs tracking-wider flex items-center space-x-1.5 backdrop-blur-sm whitespace-nowrap">
                   <span>💬 Selamat datang! ✨</span>
                 </div>
-
-                <div className="w-2 h-2 bg-[#12131C] border-r border-b border-cyan-500/60 rotate-45 mx-auto -mt-1" />
-              </div>
+                {/* Panah bubble disesuaikan posisinya di mobile agar tetap menunjuk ke kepala robot */}
+                <div className="w-2 h-2 bg-[#12131C] border-r border-b border-cyan-500/60 rotate-45 ml-6 sm:mx-auto -mt-1" />
+              </div>  
             )}
 
+            {/* Robot SVG */}
             <div
               className={`relative origin-bottom ${
                 phase === "IDLE" || phase === "SEARCHING"
@@ -663,8 +404,7 @@ export default function Intro({ onComplete }) {
               }`}
             >
               <svg
-                className="robot-svg w-28 h-32 sm:w-32 sm:h-40 drop-shadow-xl"
-                // Ubah dari "0 0 140 160" menjadi "0 0 170 160"
+                className="robot-svg w-20 h-24 xs:w-24 xs:h-28 md:w-28 md:h-32 lg:w-32 lg:h-40 drop-shadow-xl"
                 viewBox="0 0 170 160"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -678,7 +418,6 @@ export default function Intro({ onComplete }) {
                     y2="100%"
                   >
                     <stop offset="0%" stopColor="#ffffff" />
-
                     <stop offset="100%" stopColor="#cbd5e1" />
                   </linearGradient>
 
@@ -690,7 +429,6 @@ export default function Intro({ onComplete }) {
                     y2="100%"
                   >
                     <stop offset="0%" stopColor="#1e293b" />
-
                     <stop offset="100%" stopColor="#020617" />
                   </linearGradient>
 
@@ -702,7 +440,6 @@ export default function Intro({ onComplete }) {
                     y2="100%"
                   >
                     <stop offset="0%" stopColor="#f8fafc" />
-
                     <stop offset="100%" stopColor="#94a3b8" />
                   </linearGradient>
                 </defs>
@@ -716,7 +453,6 @@ export default function Intro({ onComplete }) {
                   rx="10"
                   fill="#94a3b8"
                 />
-
                 {/* Neck */}
                 <rect
                   x="62"
@@ -726,8 +462,7 @@ export default function Intro({ onComplete }) {
                   rx="4"
                   fill="#94a3b8"
                 />
-
-                {/* Body / Torso */}
+                {/* Torso */}
                 <rect
                   x="40"
                   y="80"
@@ -736,7 +471,6 @@ export default function Intro({ onComplete }) {
                   rx="30"
                   fill="url(#torsoGrad)"
                 />
-
                 <path
                   d="M 40 125 Q 70 135 100 125"
                   stroke="#cbd5e1"
@@ -773,9 +507,7 @@ export default function Intro({ onComplete }) {
 
                 {/* Right Arm */}
                 <g
-                  className={`welcome-shoulder ${
-                    isGreeting ? "welcome-arm-anim" : ""
-                  }`}
+                  className={`welcome-shoulder ${isGreeting ? "welcome-arm-anim" : ""}`}
                 >
                   <g
                     style={{
@@ -804,8 +536,6 @@ export default function Intro({ onComplete }) {
                         fill="url(#whitePlastic)"
                         filter="drop-shadow(0px 4px 4px rgba(0,0,0,0.1))"
                       />
-
-                      {/* Waving Hand / Forearm */}
                       <g className={isGreeting ? "welcome-hand-anim" : ""}>
                         <rect
                           x="98"
@@ -820,7 +550,7 @@ export default function Intro({ onComplete }) {
                   </g>
                 </g>
 
-                {/* Head Group */}
+                {/* Head */}
                 <g
                   className={
                     phase === "IDLE"
@@ -839,7 +569,6 @@ export default function Intro({ onComplete }) {
                     fill="url(#whitePlastic)"
                     filter="drop-shadow(0px 6px 6px rgba(0,0,0,0.15))"
                   />
-
                   <path
                     d="M 35 25 Q 70 20 105 25"
                     stroke="#ffffff"
@@ -848,7 +577,6 @@ export default function Intro({ onComplete }) {
                     strokeLinecap="round"
                     opacity="0.8"
                   />
-
                   <rect
                     x="33"
                     y="32"
@@ -871,7 +599,6 @@ export default function Intro({ onComplete }) {
                           strokeLinecap="round"
                           fill="none"
                         />
-
                         <path
                           d="M 81 49 Q 89 42 97 49"
                           stroke="currentColor"
@@ -879,7 +606,6 @@ export default function Intro({ onComplete }) {
                           strokeLinecap="round"
                           fill="none"
                         />
-
                         <path
                           d="M 60 56 Q 70 66 80 56"
                           stroke="currentColor"
@@ -894,12 +620,10 @@ export default function Intro({ onComplete }) {
                           d="M 45 48 A 7 7 0 0 0 59 48 Z"
                           fill="currentColor"
                         />
-
                         <path
                           d="M 81 48 A 7 7 0 0 0 95 48 Z"
                           fill="currentColor"
                         />
-
                         <path
                           d="M 66 57 A 4 4 0 0 1 74 57 Z"
                           fill="currentColor"
@@ -913,7 +637,7 @@ export default function Intro({ onComplete }) {
 
             {/* Dynamic Shadow */}
             <div
-              className={`w-16 h-2 bg-black/60 rounded-full blur-[3px] mt-2 transition-transform duration-300 ${
+              className={`w-12 xs:w-14 md:w-16 h-2 bg-black/60 rounded-full blur-[3px] mt-2 transition-transform duration-300 ${
                 phase === "WALKING" || isGreeting
                   ? "scale-90 opacity-50"
                   : "scale-100 opacity-80"
@@ -925,28 +649,27 @@ export default function Intro({ onComplete }) {
 
       {/* UI FOREGROUND LAYER */}
       <div
-        className={`intro-foreground absolute inset-0 flex flex-col items-center justify-end pb-24 sm:pb-32 z-50 pointer-events-auto transition-opacity duration-500 ${
+        className={`intro-foreground absolute inset-0 flex flex-col items-center justify-end pb-12 xs:pb-16 md:pb-24 lg:pb-32 z-50 pointer-events-auto transition-opacity duration-500 ${
           phase !== "IDLE" ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
       >
-        <p className="intro-system-ready text-slate-500 text-xs mb-4 tracking-[0.2em] animate-pulse">
+        <p className="text-slate-500 text-[10px] xs:text-xs mb-3 xs:mb-4 tracking-[0.2em] animate-pulse">
           SYSTEM READY
         </p>
 
         <button
           onClick={startExperience}
-          className="enter-experience group relative min-h-[44px] px-8 py-3 bg-[#12131C] border border-slate-700/50 hover:border-cyan-500/50 rounded text-cyan-500 text-sm tracking-widest overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)] focus:outline-none focus:ring-2 focus:ring-cyan-500/50 touch-manipulation"
+          className="enter-experience group relative min-h-[40px] xs:min-h-[44px] px-6 xs:px-8 py-2.5 xs:py-3 bg-[#12131C] border border-slate-700/50 hover:border-cyan-500/50 rounded text-cyan-500 text-xs xs:text-sm tracking-widest overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)] focus:outline-none focus:ring-2 focus:ring-cyan-500/50 touch-manipulation"
         >
           <div className="absolute inset-0 bg-cyan-500/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-
           <span className="relative z-10">[ ENTER EXPERIENCE ]</span>
         </button>
       </div>
 
-      {/* Minimal Skip Button */}
+      {/* Skip Button */}
       <button
         onClick={triggerComplete}
-        className="skip-sequence absolute top-6 right-8 text-[10px] text-slate-600 hover:text-slate-400 tracking-widest uppercase transition-colors z-[100] focus:outline-none focus:ring-1 focus:ring-slate-500 rounded px-2 py-1 touch-manipulation"
+        className="skip-sequence absolute top-4 xs:top-6 right-4 xs:right-8 text-[10px] text-slate-600 hover:text-slate-400 tracking-widest uppercase transition-colors z-[100] focus:outline-none focus:ring-1 focus:ring-slate-500 rounded px-2 py-1 touch-manipulation"
         aria-label="Skip Introduction"
       >
         Skip sequence
