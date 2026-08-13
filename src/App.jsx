@@ -1,4 +1,7 @@
-import { useState, useEffect } from "react";
+"use client";
+
+import { useState } from "react";
+
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import BottomNav from "./components/layout/BottomNav";
@@ -14,7 +17,11 @@ import Intro from "./components/intro/Intro";
 import { motion, useReducedMotion } from "framer-motion";
 
 const sectionVariant = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: {
+    opacity: 0,
+    y: 40,
+  },
+
   visible: {
     opacity: 1,
     y: 0,
@@ -26,101 +33,164 @@ const sectionVariant = {
 };
 
 const sectionVariantReduced = {
-  hidden: { opacity: 0, y: 0 },
+  hidden: {
+    opacity: 0,
+    y: 0,
+  },
+
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.1 },
+    transition: {
+      duration: 0.1,
+    },
   },
 };
 
 function App() {
   const shouldReduceMotion = useReducedMotion();
+
   const activeVariant = shouldReduceMotion
     ? sectionVariantReduced
     : sectionVariant;
 
-  // Set ke useState(true) untuk testing tampilan,
-  // atau pakai logika sessionStorage untuk mode produksi
+  /*
+   * Intro tetap aktif saat pertama kali halaman dibuka.
+   * Setelah Intro selesai, website bisa digunakan.
+   */
   const [isIntroActive, setIsIntroActive] = useState(true);
 
   const handleIntroComplete = () => {
     setIsIntroActive(false);
+
     if (typeof window !== "undefined") {
-      sessionStorage.setItem("portfolio_intro_seen", "true");
+      sessionStorage.setItem(
+        "portfolio_intro_seen",
+        "true"
+      );
     }
   };
 
   return (
     <>
-      {/* Intro Modal (Hanya muncul jika belum pernah dilihat dalam 1 sesi) */}
-      {isIntroActive && <Intro onComplete={handleIntroComplete} />}
+      {/* =========================================
+          INTRO
+      ========================================== */}
+      {isIntroActive && (
+        <Intro onComplete={handleIntroComplete} />
+      )}
 
-      {/* Main Website Interface - Tetap di-render di background (Preloaded) */}
+      {/* =========================================
+          MAIN WEBSITE
+      ========================================== */}
       <div
         className={
-          isIntroActive ? "overflow-hidden h-screen pointer-events-none" : ""
+          isIntroActive
+            ? "overflow-hidden h-screen pointer-events-none"
+            : "w-full min-w-0"
         }
       >
         <Navbar />
 
-        <main className="min-h-screen w-full min-w-0 max-w-full">
-          <div className="w-full min-w-0">
-            <Home isIntroActive={isIntroActive} />
-          </div>
+        <main className="min-h-screen w-full min-w-0">
+          
+          {/* =====================================
+              HOME
 
+              IMPORTANT:
+              Jangan tambahkan id="home" di sini.
+              Home.jsx sudah memiliki id="home".
+          ====================================== */}
+          <Home isIntroActive={isIntroActive} />
+
+          {/* =====================================
+              ABOUT
+          ====================================== */}
           <motion.section
             id="about"
+            className="w-full min-w-0"
             variants={activeVariant}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{
+              once: true,
+              amount: 0.15,
+            }}
           >
             <About />
           </motion.section>
 
+          {/* =====================================
+              SKILLS
+          ====================================== */}
           <motion.section
             id="skills"
+            className="w-full min-w-0"
             variants={activeVariant}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{
+              once: true,
+              amount: 0.15,
+            }}
           >
             <Skills />
           </motion.section>
 
+          {/* =====================================
+              PROJECTS
+          ====================================== */}
           <motion.section
             id="projects"
+            className="w-full min-w-0"
             variants={activeVariant}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{
+              once: true,
+              amount: 0.15,
+            }}
           >
             <Projects />
           </motion.section>
 
+          {/* =====================================
+              CERTIFICATES
+          ====================================== */}
           <motion.section
             id="certificates"
+            className="w-full min-w-0"
             variants={activeVariant}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{
+              once: true,
+              amount: 0.15,
+            }}
           >
             <Certificates />
           </motion.section>
 
+          {/* =====================================
+              CONTACT
+          ====================================== */}
           <motion.section
             id="contact"
+            className="w-full min-w-0"
             variants={activeVariant}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{
+              once: true,
+              amount: 0.15,
+            }}
           >
             <Contact />
           </motion.section>
         </main>
 
         <Footer />
+
         <BottomNav />
       </div>
     </>

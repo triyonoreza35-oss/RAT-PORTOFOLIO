@@ -81,30 +81,26 @@ function ProjectCard({ project }) {
   return (
     <div
       className="
-      relative min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900
-      transition-all duration-300
-      hover:-translate-y-1 hover:shadow-xl hover:shadow-black/30
+        relative rounded-2xl border border-slate-800 bg-slate-900 overflow-hidden
+        transition-all duration-300
+        hover:-translate-y-1 hover:shadow-xl hover:shadow-black/30
       "
     >
       {/* Image Slider */}
-      <div className="relative aspect-[16/9] w-full overflow-hidden">
+      <div className="relative aspect-[16/9] overflow-hidden">
         <div
-          className="flex h-full w-full transition-transform duration-700 ease-in-out"
-          style={{
-            transform: `translate3d(-${index * 100}%, 0, 0)`,
-          }}
+          className="flex transition-transform duration-700 ease-in-out"
+          style={{ transform: `translateX(-${index * 100}%)` }}
         >
           {project.images.map((src, i) => (
-            <div key={i} className="h-full w-full flex-[0_0_100%]">
-              <img
-                src={src}
-                alt={project.title}
-                className="block h-full w-full object-cover object-top"
-              />
-            </div>
+            <img
+              key={i}
+              src={src}
+              alt={project.title}
+              className="w-full h-full flex-shrink-0 object-cover object-top"
+            />
           ))}
         </div>
-
         <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-900 to-transparent" />
       </div>
 
