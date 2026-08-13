@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { 
-  Menu, 
-  X, 
   Home, 
   User, 
   Code2, 
@@ -11,8 +9,8 @@ import {
   Award, 
   Mail 
 } from "lucide-react";
+import { useScrollSpy } from "../../hooks/useScrollSpy";
 
-// Pemetaan icon untuk masing-masing menu item
 const menuIcons = {
   home: Home,
   about: User,
@@ -22,51 +20,18 @@ const menuIcons = {
   contact: Mail,
 };
 
+const MENUS = [
+  "Home",
+  "About",
+  "Skills",
+  "Projects",
+  "Certificates",
+  "Contact",
+];
+
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState("home");
-
-  const menus = [
-    "Home",
-    "About",
-    "Skills",
-    "Projects",
-    "Certificates",
-    "Contact",
-  ];
-
-  // Detect scroll for navbar style
-  useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Simple scroll spy
-  useEffect(() => {
-    const sections = menus.map((m) =>
-      document.getElementById(m.toLowerCase())
-    );
-
-    const onScroll = () => {
-      const scrollPos = window.scrollY + 120;
-      sections.forEach((section) => {
-        if (
-          section &&
-          scrollPos >= section.offsetTop &&
-          scrollPos < section.offsetTop + section.offsetHeight
-        ) {
-          setActive(section.id);
-        }
-      });
-    };
-
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const menuIds = useMemo(() => MENUS.map((m) => m.toLowerCase()), []);
+  const { active, scrolled } = useScrollSpy(menuIds, 120, 20);
 
   return (
     <nav
@@ -100,9 +65,9 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Desktop Menu - Floating Pill Navigation */}
+        {/* Desktop Menu */}
         <ul className="hidden md:flex items-center gap-1 p-1.5 rounded-full bg-slate-900/80 border border-slate-800/90 backdrop-blur-md shadow-xl shadow-black/30">
-          {menus.map((item) => {
+          {MENUS.map((item) => {
             const id = item.toLowerCase();
             const isActive = active === id;
             const Icon = menuIcons[id] || Home;

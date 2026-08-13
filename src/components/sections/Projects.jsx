@@ -13,7 +13,7 @@ const projects = [
     result:
       "Mempermudah proses pencatatan dan rekap data tamu, serta mengurangi risiko kehilangan data secara signifikan.",
     tech: "Laravel • Bootstrap • MySQL",
-    images: ["/image/login1.jpeg", "/image/admin1.jpeg", "/image/user2.jpeg"],
+    images: ["/image/login1.webp", "/image/admin1.webp", "/image/user2.webp"],
   },
   {
     title: "Website Peminjaman Ruangan",
@@ -25,7 +25,7 @@ const projects = [
     result:
       "Mengurangi konflik jadwal dan meningkatkan efisiensi peminjaman ruangan secara online.",
     tech: "Next.js • React • Tailwind CSS",
-    images: ["/image/login2.jpeg", "/image/admin2.jpeg", "/image/user3.jpeg"],
+    images: ["/image/login2.jpeg", "/image/admin2.webp", "/image/user3.jpeg"],
   },
   {
     title: "Website Bengkel Digital",

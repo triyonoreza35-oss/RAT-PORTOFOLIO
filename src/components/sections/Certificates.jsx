@@ -9,7 +9,7 @@ const certificates = [
     issuer: "Academic & Professional Training",
     year: "2024",
     skills: ["SQL", "Database Design", "Relational Data"],
-    image: "/image/3.webP",
+    image: "/image/3.webp",
     icon: Database,
   },
   {
@@ -17,7 +17,7 @@ const certificates = [
     issuer: "Badan Nasional Sertifikasi Profesi (BNSP)",
     year: "2025",
     skills: ["System Analysis", "UML", "Documentation"],
-    image: "/image/2.webP",
+    image: "/image/2.webp",
     icon: Award,
   },
   {
@@ -25,7 +25,7 @@ const certificates = [
     issuer: "Online Learning Platform",
     year: "2023",
     skills: ["Logic", "Data Processing", "Automation"],
-    image: "/image/python.webP",
+    image: "/image/python.webp",
     icon: Code2,
   },
   {
@@ -33,7 +33,7 @@ const certificates = [
     issuer: "Cisco Networking Academy",
     year: "2024",
     skills: ["Network Security", "Threat Awareness"],
-    image: "/image/1.webP",
+    image: "/image/1.webp",
     icon: ShieldCheck,
   },
 ];
@@ -150,11 +150,12 @@ export default function Certificates() {
               <X size={20} />
             </button>
 
-            {/* Image Preview */}
+            {/* Image Preview - Tidak menggunakan loading="lazy" karena baru dirender saat modal dibuka, cukup decoding="async" */}
             <div className="flex justify-center mt-2 overflow-hidden rounded-xl bg-slate-950 border border-slate-800/80">
               <img
                 src={activeCert.image}
                 alt={activeCert.title}
+                decoding="async"
                 className="w-full max-h-[65vh] object-contain"
               />
             </div>
@@ -237,6 +238,8 @@ function CertificateCard({ cert, onClick }) {
           <img
             src={activeCertImage(cert.image)}
             alt={cert.title}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100"
             onError={(e) => {
               // Fallback placeholder jika gambar gagal dimuat
