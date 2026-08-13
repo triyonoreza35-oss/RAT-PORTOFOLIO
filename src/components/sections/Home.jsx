@@ -23,7 +23,7 @@ export default function Home({ isIntroActive = false }) {
 
   const canvasRef = useRef(null);
 
-  // 1. Pemicu start typing setelah intro selesai (jeda 300ms agar pas dengan CSS scroll-reveal)
+  // 1. Pemicu start typing setelah intro selesai
   useEffect(() => {
     if (isIntroActive) {
       setCanStartTyping(false);
@@ -45,25 +45,21 @@ export default function Home({ isIntroActive = false }) {
     let timer;
 
     if (!isDeleting) {
-      // Mode Mengetik
       if (displayText.length < currentFullText.length) {
         timer = setTimeout(() => {
           setDisplayText(currentFullText.slice(0, displayText.length + 1));
-        }, 70); // Typing speed: 70ms
+        }, 70);
       } else {
-        // Selesai Mengetik: Jeda 1800ms
         timer = setTimeout(() => {
           setIsDeleting(true);
         }, 1800);
       }
     } else {
-      // Mode Menghapus
       if (displayText.length > 0) {
         timer = setTimeout(() => {
           setDisplayText(currentFullText.slice(0, displayText.length - 1));
-        }, 40); // Delete speed: 40ms
+        }, 40);
       } else {
-        // Selesai Menghapus: Jeda 400ms lalu ganti kalimat berikutnya
         timer = setTimeout(() => {
           setIsDeleting(false);
           setRoleIndex((prev) => (prev + 1) % ROLES.length);
@@ -81,8 +77,15 @@ export default function Home({ isIntroActive = false }) {
     const ctx = canvas.getContext("2d");
 
     let animationFrameId;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+
+    // FIX 1: Gunakan clientWidth dari parent container agar konsisten dengan viewport aktual
+    const getViewportWidth = () =>
+      canvas.parentElement?.clientWidth || window.innerWidth;
+    const getViewportHeight = () =>
+      canvas.parentElement?.clientHeight || window.innerHeight;
+
+    let width = (canvas.width = getViewportWidth());
+    let height = (canvas.height = getViewportHeight());
 
     const PARTICLE_COUNT = 70;
     const MIN_SPEED = 0.15;
@@ -91,9 +94,9 @@ export default function Home({ isIntroActive = false }) {
     const RETARGET_MIN_S = 2.5;
     const RETARGET_MAX_S = 5.5;
     const CONNECTION_DIST = 120;
-    const CONNECTION_DIST_SQ = CONNECTION_DIST * CONNECTION_DIST; // Pre-calculated square
+    const CONNECTION_DIST_SQ = CONNECTION_DIST * CONNECTION_DIST;
     const MOUSE_RADIUS = 140;
-    const MOUSE_RADIUS_SQ = MOUSE_RADIUS * MOUSE_RADIUS; // Pre-calculated square
+    const MOUSE_RADIUS_SQ = MOUSE_RADIUS * MOUSE_RADIUS;
     const MOUSE_FORCE = 0.9;
     const EDGE_MARGIN = 30;
 
@@ -140,8 +143,8 @@ export default function Home({ isIntroActive = false }) {
     });
 
     const handleResize = () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      width = canvas.width = getViewportWidth();
+      height = canvas.height = getViewportHeight();
     };
 
     window.addEventListener("resize", handleResize);
@@ -178,7 +181,6 @@ export default function Home({ isIntroActive = false }) {
 
         const dx = p.x - mouseX;
         const dy = p.y - mouseY;
-        // Optimasi: Gunakan squared distance sebelum Math.hypot/Math.sqrt
         const mouseDistSq = dx * dx + dy * dy;
 
         if (mouseDistSq < MOUSE_RADIUS_SQ && mouseDistSq > 0.000001) {
@@ -196,7 +198,6 @@ export default function Home({ isIntroActive = false }) {
         p.vy += (p.targetVy - p.vy) * SMOOTHING * dt;
 
         const maxSpeed = MAX_SPEED * p.speedMultiplier * 3;
-        // Optimasi: Squared distance check untuk batas kecepatan
         const speedSq = p.vx * p.vx + p.vy * p.vy;
 
         if (speedSq > maxSpeed * maxSpeed) {
@@ -219,7 +220,6 @@ export default function Home({ isIntroActive = false }) {
         ctx.fillStyle = `rgba(34, 211, 238, ${p.baseOpacity})`;
         ctx.fill();
 
-        // Masukkan partikel ke dalam Spatial Grid
         const col = Math.floor(
           Math.max(0, Math.min(p.x, width - 1)) / cellSize,
         );
@@ -231,8 +231,6 @@ export default function Home({ isIntroActive = false }) {
       });
 
       // --- OPTIMIZED CONNECTION CHECK VIA SPATIAL GRID ---
-      // Offsets 5 arah (Self, Right, Bottom-Left, Bottom, Bottom-Right)
-      // Menjamin seluruh pasangan unik dalam radius CONNECTION_DIST terperiksa persis 1 kali tanpa duplikasi
       const neighborOffsets = [
         [0, 0],
         [1, 0],
@@ -268,16 +266,16 @@ export default function Home({ isIntroActive = false }) {
                   const pdy = p1.y - p2.y;
                   const distSq = pdx * pdx + pdy * pdy;
 
-                  // Direct squared check
                   if (distSq < CONNECTION_DIST_SQ) {
-                    const dist = Math.sqrt(distSq); // Math.sqrt hanya dieksekusi jika koneksi terbentuk
+                    const dist = Math.sqrt(distSq);
                     const depthFactor = (p1.depth + p2.depth) / 2;
 
                     ctx.beginPath();
                     ctx.moveTo(p1.x, p1.y);
                     ctx.lineTo(p2.x, p2.y);
                     ctx.strokeStyle = `rgba(167, 139, 250, ${
-                      (1 - dist / CONNECTION_DIST) * (0.25 + depthFactor * 0.3)
+                      (1 - dist / CONNECTION_DIST) *
+                      (0.25 + depthFactor * 0.3)
                     })`;
                     ctx.lineWidth = 0.5;
                     ctx.stroke();
@@ -301,7 +299,9 @@ export default function Home({ isIntroActive = false }) {
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mouseX, mouseY);
-          ctx.strokeStyle = `rgba(34, 211, 238, ${1 - mDist / MOUSE_RADIUS})`;
+          ctx.strokeStyle = `rgba(34, 211, 238, ${
+            1 - mDist / MOUSE_RADIUS
+          })`;
           ctx.lineWidth = 0.8;
           ctx.stroke();
         }
@@ -320,19 +320,24 @@ export default function Home({ isIntroActive = false }) {
   }, []);
 
   return (
+    // FIX 2: Tambahkan w-full max-w-full overflow-x-clip pada root section
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center bg-[#07080C] overflow-hidden py-12 xs:py-16 md:py-20"
+      className="relative min-h-screen w-full max-w-full flex items-center justify-center bg-[#07080C] overflow-x-clip py-12 xs:py-16 md:py-20"
     >
       {/* Interactive Particle Network */}
+      {/* FIX 3: Gunakan overflow-hidden & pointer-events-none secara ketat pada background wrapper */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 pointer-events-none overflow-hidden cyber-grid layer-bg"
+        className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden cyber-grid layer-bg"
       >
-        <canvas ref={canvasRef} className="absolute inset-0 z-0 opacity-80" />
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 block w-full h-full z-0 opacity-80"
+        />
 
-        <div className="absolute -top-40 -left-40 w-[300px] xs:w-[400px] md:w-[600px] h-[300px] xs:h-[400px] md:h-[600px] bg-purple-900/20 rounded-full blur-[100px] md:blur-[150px]" />
-        <div className="absolute -bottom-40 -right-40 w-[300px] xs:w-[400px] md:w-[600px] h-[300px] xs:h-[400px] md:h-[600px] bg-cyan-900/20 rounded-full blur-[100px] md:blur-[150px]" />
+        <div className="absolute -top-40 -left-40 w-[300px] xs:w-[400px] md:w-[600px] h-[300px] xs:h-[400px] md:h-[600px] bg-purple-900/20 rounded-full blur-[100px] md:blur-[150px] max-w-[100vw]" />
+        <div className="absolute -bottom-40 -right-40 w-[300px] xs:w-[400px] md:w-[600px] h-[300px] xs:h-[400px] md:h-[600px] bg-cyan-900/20 rounded-full blur-[100px] md:blur-[150px] max-w-[100vw]" />
       </div>
 
       {/* Main Content */}
@@ -342,7 +347,8 @@ export default function Home({ isIntroActive = false }) {
           isIntroActive ? "opacity-0" : "opacity-100 start-reveal"
         }`}
       >
-        <div className="relative max-w-2xl pl-4 xs:pl-6 md:pl-10 border-l border-slate-800/80 layer-front transition-transform duration-200 ease-out">
+        {/* FIX 4: Tambahkan max-w-full dan min-w-0 pada container teks agar fleksibel di layar sangat sempit */}
+        <div className="relative max-w-2xl min-w-0 pl-4 xs:pl-6 md:pl-10 border-l border-slate-800/80 layer-front transition-transform duration-200 ease-out">
           {/* Neon Accent Bar */}
           <span
             aria-hidden="true"
@@ -354,7 +360,7 @@ export default function Home({ isIntroActive = false }) {
 
           {/* Title / Name */}
           <h1
-            className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-100 mb-2 scroll-reveal leading-tight"
+            className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-100 mb-2 scroll-reveal leading-tight break-words"
             style={{
               animationPlayState: isIntroActive ? "paused" : "running",
             }}
@@ -370,11 +376,11 @@ export default function Home({ isIntroActive = false }) {
               animationPlayState: isIntroActive ? "paused" : "running",
             }}
           >
-            <span className="inline-flex items-center text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-mono tracking-tight">
+            <span className="inline-flex items-center text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-mono tracking-tight max-w-full overflow-hidden">
               {displayText}
 
               {/* Cursor Cyan-400 */}
-              <span className="inline-block w-[2px] sm:w-[3px] h-[0.85em] bg-cyan-400 ml-1 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,211,238,0.9)]" />
+              <span className="inline-block w-[2px] sm:w-[3px] h-[0.85em] bg-cyan-400 ml-1 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,211,238,0.9)] flex-shrink-0" />
             </span>
           </h2>
 
@@ -395,7 +401,7 @@ export default function Home({ isIntroActive = false }) {
 
           {/* Call-to-Action Buttons */}
           <div
-            className="flex flex-col xs:flex-row gap-3 xs:gap-4 md:gap-5 scroll-reveal"
+            className="flex flex-col xs:flex-row gap-3 xs:gap-4 md:gap-5 scroll-reveal w-full max-w-full"
             style={{
               animationDelay: "0.6s",
               animationPlayState: isIntroActive ? "paused" : "running",
@@ -403,7 +409,7 @@ export default function Home({ isIntroActive = false }) {
           >
             <a
               href="#contact"
-              className="group relative inline-flex justify-center items-center px-6 xs:px-7 md:px-8 py-3 xs:py-3.5 rounded-lg bg-slate-100 text-slate-900 font-semibold text-xs xs:text-sm md:text-base tracking-wide overflow-hidden transition-transform duration-150 ease-out shadow-lg touch-manipulation"
+              className="group relative inline-flex justify-center items-center px-6 xs:px-7 md:px-8 py-3 xs:py-3.5 rounded-lg bg-slate-100 text-slate-900 font-semibold text-xs xs:text-sm md:text-base tracking-wide overflow-hidden transition-transform duration-150 ease-out shadow-lg touch-manipulation w-full xs:w-auto"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <span className="relative z-10 group-hover:text-white transition-colors duration-300">
@@ -414,7 +420,7 @@ export default function Home({ isIntroActive = false }) {
             <a
               href="/cv/CV.pdf"
               download
-              className="group inline-flex justify-center items-center px-6 xs:px-7 md:px-8 py-3 xs:py-3.5 rounded-lg border border-slate-700/80 bg-slate-900/50 text-slate-300 font-medium text-xs xs:text-sm md:text-base tracking-wide transition-all hover:bg-slate-800 hover:border-purple-500/50 hover:text-white touch-manipulation"
+              className="group inline-flex justify-center items-center px-6 xs:px-7 md:px-8 py-3 xs:py-3.5 rounded-lg border border-slate-700/80 bg-slate-900/50 text-slate-300 font-medium text-xs xs:text-sm md:text-base tracking-wide transition-all hover:bg-slate-800 hover:border-purple-500/50 hover:text-white touch-manipulation w-full xs:w-auto"
             >
               Unduh CV
             </a>
