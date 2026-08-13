@@ -64,7 +64,7 @@ function App() {
       >
         <Navbar />
 
-        <main className="min-h-screen">
+        <main className="min-h-screen w-full min-w-0 max-w-full">
           <div className="w-full min-w-0">
             <Home isIntroActive={isIntroActive} />
           </div>

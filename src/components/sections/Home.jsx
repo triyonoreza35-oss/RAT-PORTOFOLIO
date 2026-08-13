@@ -133,7 +133,9 @@ export default function Home({ isIntroActive = false }) {
       mouseY = e.clientY;
     };
 
-    window.addEventListener("mousemove", handleCanvasMouseMove, { passive: true });
+    window.addEventListener("mousemove", handleCanvasMouseMove, {
+      passive: true,
+    });
 
     const handleResize = () => {
       width = canvas.width = window.innerWidth;
@@ -215,8 +217,7 @@ export default function Home({ isIntroActive = false }) {
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
             ctx.strokeStyle = `rgba(167, 139, 250, ${
-              (1 - dist / CONNECTION_DIST) *
-              (0.25 + depthFactor * 0.3)
+              (1 - dist / CONNECTION_DIST) * (0.25 + depthFactor * 0.3)
             })`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
@@ -230,9 +231,7 @@ export default function Home({ isIntroActive = false }) {
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mouseX, mouseY);
-          ctx.strokeStyle = `rgba(34, 211, 238, ${
-            1 - mDist / MOUSE_RADIUS
-          })`;
+          ctx.strokeStyle = `rgba(34, 211, 238, ${1 - mDist / MOUSE_RADIUS})`;
           ctx.lineWidth = 0.8;
           ctx.stroke();
         }
@@ -253,7 +252,7 @@ export default function Home({ isIntroActive = false }) {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center bg-[#07080C] overflow-hidden py-12 xs:py-16 md:py-20"
+      className="relative w-full max-w-full min-w-0 min-h-screen flex items-center justify-center bg-[#07080C] overflow-hidden py-12 xs:py-16 md:py-20"
     >
       {/* Interactive Particle Network */}
       <div
@@ -273,7 +272,7 @@ export default function Home({ isIntroActive = false }) {
           isIntroActive ? "opacity-0" : "opacity-100 start-reveal"
         }`}
       >
-        <div className="relative max-w-2xl pl-4 xs:pl-6 md:pl-10 border-l border-slate-800/80 layer-front transition-transform duration-200 ease-out">
+        <div className="relative w-full max-w-2xl min-w-0 pl-4 xs:pl-6 md:pl-10 border-l border-slate-800/80 layer-front transition-transform duration-200 ease-out">
           {/* Neon Accent Bar */}
           <span
             aria-hidden="true"
