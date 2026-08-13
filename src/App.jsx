@@ -65,7 +65,9 @@ function App() {
         <Navbar />
 
         <main className="min-h-screen">
-          <Home isIntroActive={isIntroActive} />
+          <div className="w-full min-w-0">
+            <Home isIntroActive={isIntroActive} />
+          </div>
 
           <motion.section
             id="about"
