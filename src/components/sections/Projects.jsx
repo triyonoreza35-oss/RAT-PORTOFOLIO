@@ -25,7 +25,7 @@ const projects = [
     result:
       "Mengurangi konflik jadwal dan meningkatkan efisiensi peminjaman ruangan secara online.",
     tech: "Next.js • React • Tailwind CSS",
-    images: ["/image/login2.jpeg", "/image/admin2.webp", "/image/user3.jpeg"],
+    images: ["/image/login2.webp", "/image/admin2.webp", "/image/user3.webp"],
   },
   {
     title: "Website Bengkel Digital",
