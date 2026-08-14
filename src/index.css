@@ -5,6 +5,10 @@
 /* ============================================
    1. GLOBAL RESET & BASE STYLES
    ============================================ */
+html, body {
+  overflow-x: hidden; /* Mencegah scroll horizontal di seluruh halaman */
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -15,6 +19,7 @@ html {
   min-height: 100vh;
   margin: 0;
   padding: 0;
+  overflow-x: hidden; /* Tambahan pengaman untuk root wrapper */
 }
 
 /* ============================================
