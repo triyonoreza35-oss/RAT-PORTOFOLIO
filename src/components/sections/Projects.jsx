@@ -38,9 +38,9 @@ const projects = [
       "Membantu pelanggan mengakses informasi bengkel secara cepat dan meningkatkan profesionalitas bisnis bengkel secara online.",
     tech: "PHP Native • Bootstrap  • CSS",
     images: [
-      "/image/bengkel1.jpeg",
-      "/image/bengkel2.jpeg",
-      "/image/bengkel3.jpeg",
+      "/image/bengkel1.webp",
+      "/image/bengkel2.webp",
+      "/image/bengkel3.webp",
     ],
   },
 ];
