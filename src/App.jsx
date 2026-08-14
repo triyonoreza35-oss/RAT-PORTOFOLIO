@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import BottomNav from "./components/layout/BottomNav";
@@ -12,6 +12,7 @@ import Contact from "./components/sections/Contact";
 
 import Intro from "./components/intro/Intro";
 import { motion, useReducedMotion } from "framer-motion";
+import { useScrollSpy } from "./hooks/useScrollSpy";
 
 const sectionVariant = {
   hidden: { opacity: 0, y: 40 },
@@ -34,12 +35,23 @@ const sectionVariantReduced = {
   },
 };
 
-function App() {
+const MENUS = [
+  "Home",
+  "About",
+  "Skills",
+  "Projects",
+  "Certificates",
+  "Contact",
+];
+
+export default function App() {
+  // Framer Motion Reduced Motion configuration
   const shouldReduceMotion = useReducedMotion();
   const activeVariant = shouldReduceMotion
     ? sectionVariantReduced
     : sectionVariant;
 
+  // Intro state configuration
   const [isIntroActive, setIsIntroActive] = useState(true);
 
   const handleIntroComplete = () => {
@@ -49,9 +61,12 @@ function App() {
     }
   };
 
+  // 1 Instance useScrollSpy pusat di parent
+  const menuIds = useMemo(() => MENUS.map((m) => m.toLowerCase()), []);
+  const { active, scrolled } = useScrollSpy(menuIds, 120, 20);
+
   return (
-    /* PERUBAHAN UTAMA DI SINI: Ganti <> dengan div relative, w-full, dan overflow-x-hidden */
-    <div className="relative w-full min-h-screen overflow-x-hidden">
+    <div className="relative bg-[#07080C] min-h-screen text-slate-100 overflow-x-hidden">
       
       {/* Intro Modal */}
       {isIntroActive && <Intro onComplete={handleIntroComplete} />}
@@ -62,7 +77,8 @@ function App() {
           isIntroActive ? "overflow-hidden h-screen pointer-events-none" : ""
         }
       >
-        <Navbar />
+        {/* Navbar menerima state dari parent (active & scrolled) */}
+        <Navbar active={active} scrolled={scrolled} />
 
         <main className="min-h-screen">
           <section id="home">
@@ -121,11 +137,10 @@ function App() {
         </main>
 
         <Footer />
-        <BottomNav />
+
+        {/* BottomNav menerima state active yang sama persis */}
+        <BottomNav active={active} />
       </div>
-    {/* PERUBAHAN UTAMA DI SINI: Tutup div pembungkus utama */}
     </div>
   );
 }
-
-export default App;

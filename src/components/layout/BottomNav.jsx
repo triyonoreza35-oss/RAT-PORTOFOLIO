@@ -1,8 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
 import { Home, User, Brain, Folder, Mail, Award } from "lucide-react";
-import { useScrollSpy } from "../../hooks/useScrollSpy";
 
 const MENUS = [
   { name: "Home", icon: Home },
@@ -13,10 +11,7 @@ const MENUS = [
   { name: "Contact", icon: Mail },
 ];
 
-export default function BottomNav() {
-  const menuIds = useMemo(() => MENUS.map((m) => m.name.toLowerCase()), []);
-  const { active } = useScrollSpy(menuIds, 140);
-
+export default function BottomNav({ active }) {
   return (
     <nav className="fixed bottom-3 left-1/2 -translate-x-1/2 w-[92%] max-w-md z-50 md:hidden">
       <div className="bg-slate-950/85 backdrop-blur-xl border border-slate-800/90 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] px-2 py-1.5">

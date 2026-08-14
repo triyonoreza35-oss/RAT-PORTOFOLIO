@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
 import { 
   Home, 
   User, 
@@ -9,7 +8,6 @@ import {
   Award, 
   Mail 
 } from "lucide-react";
-import { useScrollSpy } from "../../hooks/useScrollSpy";
 
 const menuIcons = {
   home: Home,
@@ -29,10 +27,7 @@ const MENUS = [
   "Contact",
 ];
 
-export default function Navbar() {
-  const menuIds = useMemo(() => MENUS.map((m) => m.toLowerCase()), []);
-  const { active, scrolled } = useScrollSpy(menuIds, 120, 20);
-
+export default function Navbar({ active, scrolled }) {
   return (
     <nav
       className={`

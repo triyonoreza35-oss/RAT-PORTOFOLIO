@@ -91,7 +91,9 @@ export default function Home({ isIntroActive = false }) {
     const RETARGET_MIN_S = 2.5;
     const RETARGET_MAX_S = 5.5;
     const CONNECTION_DIST = 120;
+    const CONNECTION_DIST_SQ = CONNECTION_DIST * CONNECTION_DIST; // Pre-calculated square
     const MOUSE_RADIUS = 140;
+    const MOUSE_RADIUS_SQ = MOUSE_RADIUS * MOUSE_RADIUS; // Pre-calculated square
     const MOUSE_FORCE = 0.9;
     const EDGE_MARGIN = 30;
 
@@ -133,7 +135,9 @@ export default function Home({ isIntroActive = false }) {
       mouseY = e.clientY;
     };
 
-    window.addEventListener("mousemove", handleCanvasMouseMove, { passive: true });
+    window.addEventListener("mousemove", handleCanvasMouseMove, {
+      passive: true,
+    });
 
     const handleResize = () => {
       width = canvas.width = window.innerWidth;
@@ -152,6 +156,16 @@ export default function Home({ isIntroActive = false }) {
 
       ctx.clearRect(0, 0, width, height);
 
+      // --- SPATIAL GRID INITIALIZATION ---
+      const cellSize = CONNECTION_DIST;
+      const cols = Math.max(1, Math.ceil(width / cellSize));
+      const rows = Math.max(1, Math.ceil(height / cellSize));
+      const grid = new Array(cols * rows);
+
+      for (let i = 0; i < grid.length; i++) {
+        grid[i] = [];
+      }
+
       particles.forEach((p) => {
         p.retargetIn -= dtSeconds;
 
@@ -164,9 +178,11 @@ export default function Home({ isIntroActive = false }) {
 
         const dx = p.x - mouseX;
         const dy = p.y - mouseY;
-        const mouseDist = Math.hypot(dx, dy);
+        // Optimasi: Gunakan squared distance sebelum Math.hypot/Math.sqrt
+        const mouseDistSq = dx * dx + dy * dy;
 
-        if (mouseDist < MOUSE_RADIUS && mouseDist > 0.001) {
+        if (mouseDistSq < MOUSE_RADIUS_SQ && mouseDistSq > 0.000001) {
+          const mouseDist = Math.sqrt(mouseDistSq);
           const strength =
             (1 - mouseDist / MOUSE_RADIUS) *
             MOUSE_FORCE *
@@ -180,9 +196,11 @@ export default function Home({ isIntroActive = false }) {
         p.vy += (p.targetVy - p.vy) * SMOOTHING * dt;
 
         const maxSpeed = MAX_SPEED * p.speedMultiplier * 3;
-        const speed = Math.hypot(p.vx, p.vy);
+        // Optimasi: Squared distance check untuk batas kecepatan
+        const speedSq = p.vx * p.vx + p.vy * p.vy;
 
-        if (speed > maxSpeed) {
+        if (speedSq > maxSpeed * maxSpeed) {
+          const speed = Math.sqrt(speedSq);
           const scale = maxSpeed / speed;
           p.vx *= scale;
           p.vy *= scale;
@@ -200,39 +218,90 @@ export default function Home({ isIntroActive = false }) {
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(34, 211, 238, ${p.baseOpacity})`;
         ctx.fill();
+
+        // Masukkan partikel ke dalam Spatial Grid
+        const col = Math.floor(
+          Math.max(0, Math.min(p.x, width - 1)) / cellSize,
+        );
+        const row = Math.floor(
+          Math.max(0, Math.min(p.y, height - 1)) / cellSize,
+        );
+        const cellIndex = col + row * cols;
+        grid[cellIndex].push(p);
       });
 
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const p1 = particles[i];
-          const p2 = particles[j];
-          const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+      // --- OPTIMIZED CONNECTION CHECK VIA SPATIAL GRID ---
+      // Offsets 5 arah (Self, Right, Bottom-Left, Bottom, Bottom-Right)
+      // Menjamin seluruh pasangan unik dalam radius CONNECTION_DIST terperiksa persis 1 kali tanpa duplikasi
+      const neighborOffsets = [
+        [0, 0],
+        [1, 0],
+        [-1, 1],
+        [0, 1],
+        [1, 1],
+      ];
 
-          if (dist < CONNECTION_DIST) {
-            const depthFactor = (p1.depth + p2.depth) / 2;
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const currentCellIndex = c + r * cols;
+          const cellParticles = grid[currentCellIndex];
+          if (cellParticles.length === 0) continue;
 
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(167, 139, 250, ${
-              (1 - dist / CONNECTION_DIST) *
-              (0.25 + depthFactor * 0.3)
-            })`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
+          for (let o = 0; o < neighborOffsets.length; o++) {
+            const nc = c + neighborOffsets[o][0];
+            const nr = r + neighborOffsets[o][1];
+
+            if (nc >= 0 && nc < cols && nr >= 0 && nr < rows) {
+              const neighborCellIndex = nc + nr * cols;
+              const neighborParticles = grid[neighborCellIndex];
+              if (neighborParticles.length === 0) continue;
+
+              const isSameCell = currentCellIndex === neighborCellIndex;
+
+              for (let i = 0; i < cellParticles.length; i++) {
+                const p1 = cellParticles[i];
+                const startJ = isSameCell ? i + 1 : 0;
+
+                for (let j = startJ; j < neighborParticles.length; j++) {
+                  const p2 = neighborParticles[j];
+                  const pdx = p1.x - p2.x;
+                  const pdy = p1.y - p2.y;
+                  const distSq = pdx * pdx + pdy * pdy;
+
+                  // Direct squared check
+                  if (distSq < CONNECTION_DIST_SQ) {
+                    const dist = Math.sqrt(distSq); // Math.sqrt hanya dieksekusi jika koneksi terbentuk
+                    const depthFactor = (p1.depth + p2.depth) / 2;
+
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.strokeStyle = `rgba(167, 139, 250, ${
+                      (1 - dist / CONNECTION_DIST) * (0.25 + depthFactor * 0.3)
+                    })`;
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                  }
+                }
+              }
+            }
           }
         }
+      }
 
+      // --- MOUSE CONNECTION LINE CHECK ---
+      for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
-        const mDist = Math.hypot(p.x - mouseX, p.y - mouseY);
+        const mdx = p.x - mouseX;
+        const mdy = p.y - mouseY;
+        const mDistSq = mdx * mdx + mdy * mdy;
 
-        if (mDist < MOUSE_RADIUS) {
+        if (mDistSq < MOUSE_RADIUS_SQ) {
+          const mDist = Math.sqrt(mDistSq);
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mouseX, mouseY);
-          ctx.strokeStyle = `rgba(34, 211, 238, ${
-            1 - mDist / MOUSE_RADIUS
-          })`;
+          ctx.strokeStyle = `rgba(34, 211, 238, ${1 - mDist / MOUSE_RADIUS})`;
           ctx.lineWidth = 0.8;
           ctx.stroke();
         }
