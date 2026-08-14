@@ -40,8 +40,6 @@ function App() {
     ? sectionVariantReduced
     : sectionVariant;
 
-  // Set ke useState(true) untuk testing tampilan,
-  // atau pakai logika sessionStorage untuk mode produksi
   const [isIntroActive, setIsIntroActive] = useState(true);
 
   const handleIntroComplete = () => {
@@ -52,11 +50,13 @@ function App() {
   };
 
   return (
-    <>
-      {/* Intro Modal (Hanya muncul jika belum pernah dilihat dalam 1 sesi) */}
+    /* PERUBAHAN UTAMA DI SINI: Ganti <> dengan div relative, w-full, dan overflow-x-hidden */
+    <div className="relative w-full min-h-screen overflow-x-hidden">
+      
+      {/* Intro Modal */}
       {isIntroActive && <Intro onComplete={handleIntroComplete} />}
 
-      {/* Main Website Interface - Tetap di-render di background (Preloaded) */}
+      {/* Main Website Interface */}
       <div
         className={
           isIntroActive ? "overflow-hidden h-screen pointer-events-none" : ""
@@ -123,7 +123,8 @@ function App() {
         <Footer />
         <BottomNav />
       </div>
-    </>
+    {/* PERUBAHAN UTAMA DI SINI: Tutup div pembungkus utama */}
+    </div>
   );
 }
 
