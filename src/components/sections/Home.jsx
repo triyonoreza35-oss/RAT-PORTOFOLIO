@@ -81,6 +81,7 @@ export default function Home({ isIntroActive = false }) {
     const ctx = canvas.getContext("2d");
 
     let animationFrameId;
+    let isRunning = false; // Flag status loop animation
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
@@ -135,16 +136,10 @@ export default function Home({ isIntroActive = false }) {
       mouseY = e.clientY;
     };
 
-    window.addEventListener("mousemove", handleCanvasMouseMove, {
-      passive: true,
-    });
-
     const handleResize = () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     };
-
-    window.addEventListener("resize", handleResize);
 
     let lastTime = performance.now();
 
@@ -178,7 +173,6 @@ export default function Home({ isIntroActive = false }) {
 
         const dx = p.x - mouseX;
         const dy = p.y - mouseY;
-        // Optimasi: Gunakan squared distance sebelum Math.hypot/Math.sqrt
         const mouseDistSq = dx * dx + dy * dy;
 
         if (mouseDistSq < MOUSE_RADIUS_SQ && mouseDistSq > 0.000001) {
@@ -196,7 +190,6 @@ export default function Home({ isIntroActive = false }) {
         p.vy += (p.targetVy - p.vy) * SMOOTHING * dt;
 
         const maxSpeed = MAX_SPEED * p.speedMultiplier * 3;
-        // Optimasi: Squared distance check untuk batas kecepatan
         const speedSq = p.vx * p.vx + p.vy * p.vy;
 
         if (speedSq > maxSpeed * maxSpeed) {
@@ -231,8 +224,6 @@ export default function Home({ isIntroActive = false }) {
       });
 
       // --- OPTIMIZED CONNECTION CHECK VIA SPATIAL GRID ---
-      // Offsets 5 arah (Self, Right, Bottom-Left, Bottom, Bottom-Right)
-      // Menjamin seluruh pasangan unik dalam radius CONNECTION_DIST terperiksa persis 1 kali tanpa duplikasi
       const neighborOffsets = [
         [0, 0],
         [1, 0],
@@ -268,9 +259,8 @@ export default function Home({ isIntroActive = false }) {
                   const pdy = p1.y - p2.y;
                   const distSq = pdx * pdx + pdy * pdy;
 
-                  // Direct squared check
                   if (distSq < CONNECTION_DIST_SQ) {
-                    const dist = Math.sqrt(distSq); // Math.sqrt hanya dieksekusi jika koneksi terbentuk
+                    const dist = Math.sqrt(distSq);
                     const depthFactor = (p1.depth + p2.depth) / 2;
 
                     ctx.beginPath();
@@ -307,13 +297,60 @@ export default function Home({ isIntroActive = false }) {
         }
       }
 
+      // Panggil frame berikutnya hanya jika isRunning true
+      if (isRunning) {
+        animationFrameId = requestAnimationFrame(render);
+      }
+    };
+
+    // --- CONTROLLER ANIMATION LOOP ---
+    const startLoop = () => {
+      if (isRunning) return;
+      isRunning = true;
+      lastTime = performance.now();
       animationFrameId = requestAnimationFrame(render);
     };
 
-    animationFrameId = requestAnimationFrame(render);
+    const stopLoop = () => {
+      isRunning = false;
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+
+    // Pause/Resume saat canvas masuk/keluar dari viewport
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !document.hidden) {
+          startLoop();
+        } else {
+          stopLoop();
+        }
+      },
+      { threshold: 0 },
+    );
+
+    observer.observe(canvas);
+
+    // Pause/Resume saat tab di-background
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopLoop();
+      } else if (canvas.getBoundingClientRect().bottom > 0) {
+        startLoop();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("mousemove", handleCanvasMouseMove, {
+      passive: true,
+    });
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      stopLoop();
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("mousemove", handleCanvasMouseMove);
       window.removeEventListener("resize", handleResize);
     };

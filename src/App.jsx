@@ -1,7 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback, memo } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+
 import Navbar from "./components/layout/Navbar";
-import Footer from "./components/layout/Footer";
 import BottomNav from "./components/layout/BottomNav";
+import Footer from "./components/layout/Footer";
+import Intro from "./components/intro/Intro";
 
 import Home from "./components/sections/Home";
 import About from "./components/sections/About";
@@ -10,10 +13,9 @@ import Projects from "./components/sections/Projects";
 import Certificates from "./components/sections/Certificates";
 import Contact from "./components/sections/Contact";
 
-import Intro from "./components/intro/Intro";
-import { motion, useReducedMotion } from "framer-motion";
 import { useScrollSpy } from "./hooks/useScrollSpy";
 
+// 1. Konstan Variants di luar komponen agar tidak memicu re-render
 const sectionVariant = {
   hidden: { opacity: 0, y: 40 },
   visible: {
@@ -44,6 +46,21 @@ const MENUS = [
   "Contact",
 ];
 
+// 2. MotionSection Wrapper ter-memoisasi
+const MotionSection = memo(({ id, children, variants }) => (
+  <motion.section
+    id={id}
+    variants={variants}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true }}
+  >
+    {children}
+  </motion.section>
+));
+
+MotionSection.displayName = "MotionSection";
+
 export default function App() {
   // Framer Motion Reduced Motion configuration
   const shouldReduceMotion = useReducedMotion();
@@ -51,24 +68,23 @@ export default function App() {
     ? sectionVariantReduced
     : sectionVariant;
 
-  // Intro state configuration
+  // Intro State Configuration (kembali ke bawaan awal = true)
   const [isIntroActive, setIsIntroActive] = useState(true);
 
-  const handleIntroComplete = () => {
+  const handleIntroComplete = useCallback(() => {
     setIsIntroActive(false);
     if (typeof window !== "undefined") {
       sessionStorage.setItem("portfolio_intro_seen", "true");
     }
-  };
+  }, []);
 
-  // 1 Instance useScrollSpy pusat di parent
+  // 1 Instance useScrollSpy di parent
   const menuIds = useMemo(() => MENUS.map((m) => m.toLowerCase()), []);
   const { active, scrolled } = useScrollSpy(menuIds, 120, 20);
 
   return (
     <div className="relative bg-[#07080C] min-h-screen text-slate-100 overflow-x-hidden">
-      
-      {/* Intro Modal */}
+      {/* Intro Modal Komponen */}
       {isIntroActive && <Intro onComplete={handleIntroComplete} />}
 
       {/* Main Website Interface */}
@@ -77,7 +93,6 @@ export default function App() {
           isIntroActive ? "overflow-hidden h-screen pointer-events-none" : ""
         }
       >
-        {/* Navbar menerima state dari parent (active & scrolled) */}
         <Navbar active={active} scrolled={scrolled} />
 
         <main className="min-h-screen">
@@ -85,60 +100,29 @@ export default function App() {
             <Home isIntroActive={isIntroActive} />
           </section>
 
-          <motion.section
-            id="about"
-            variants={activeVariant}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+          <MotionSection id="about" variants={activeVariant}>
             <About />
-          </motion.section>
+          </MotionSection>
 
-          <motion.section
-            id="skills"
-            variants={activeVariant}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+          <MotionSection id="skills" variants={activeVariant}>
             <Skills />
-          </motion.section>
+          </MotionSection>
 
-          <motion.section
-            id="projects"
-            variants={activeVariant}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+          <MotionSection id="projects" variants={activeVariant}>
             <Projects />
-          </motion.section>
+          </MotionSection>
 
-          <motion.section
-            id="certificates"
-            variants={activeVariant}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+          <MotionSection id="certificates" variants={activeVariant}>
             <Certificates />
-          </motion.section>
+          </MotionSection>
 
-          <motion.section
-            id="contact"
-            variants={activeVariant}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+          <MotionSection id="contact" variants={activeVariant}>
             <Contact />
-          </motion.section>
+          </MotionSection>
         </main>
 
         <Footer />
 
-        {/* BottomNav menerima state active yang sama persis */}
         <BottomNav active={active} />
       </div>
     </div>

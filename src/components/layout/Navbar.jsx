@@ -8,6 +8,7 @@ import {
   Award, 
   Mail 
 } from "lucide-react";
+import { memo } from "react";
 
 const menuIcons = {
   home: Home,
@@ -27,7 +28,8 @@ const MENUS = [
   "Contact",
 ];
 
-export default function Navbar({ active, scrolled }) {
+// 1. Ubah deklarasi menjadi fungsi biasa (bukan export default langsung)
+function Navbar({ active, scrolled }) {
   return (
     <nav
       className={`
@@ -97,3 +99,6 @@ export default function Navbar({ active, scrolled }) {
     </nav>
   );
 }
+
+// 2. Bungkus fungsi dengan memo di luar/paling bawah file
+export default memo(Navbar);
