@@ -13,12 +13,18 @@ const certificates = [
     icon: Database,
   },
   {
-    title: "BNSP – Analis Program",
-    issuer: "Badan Nasional Sertifikasi Profesi (BNSP)",
-    year: "2025",
-    skills: ["System Analysis", "UML", "Documentation"],
-    image: "/image/2.webp",
-    icon: Award,
+    title: "Python Essentials 1",
+    issuer: "Cisco Networking Academy × OpenEDG Python Institute",
+    year: "2026",
+    skills: [
+    "Python 3",
+    "Algorithmic Thinking",
+    "Python Standard Library",
+    "Debugging & Refactoring",
+    "PCAP Preparation"
+  ],
+  image: "/image/2.webp",
+  icon: Award
   },
   {
     title: "Python Programming",
@@ -48,7 +54,7 @@ export default function Certificates() {
         className="py-16 sm:py-24 md:py-28 pb-32 sm:pb-36 bg-[#0B0F17] text-slate-100 relative isolate overflow-hidden selection:bg-cyan-500/20 selection:text-cyan-300"
       >
         {/* ========================================================= */}
-        {/* BACKGROUND DECORATIONS (UNCHANGED)                        */}
+        {/* OPTIMIZED BACKGROUND DECORATIONS (ZERO CSS BLUR FILTERS)   */}
         {/* ========================================================= */}
         <div className="absolute inset-0 -z-10 pointer-events-none select-none overflow-hidden">
           {/* 1. Technical Grid Pattern */}
@@ -63,9 +69,19 @@ export default function Certificates() {
           {/* 2. Soft Edge Masking (Vignette) */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,#0B0F17_80%)]" />
 
-          {/* 3. Restrained Ambient Glows */}
-          <div className="absolute -top-40 -left-40 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px]" />
-          <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-600/10 rounded-full blur-[120px]" />
+          {/* 3. Ambient Glows (Optimized with Hardware-Accelerated Radial Gradients) */}
+          <div 
+            className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, rgba(6, 182, 212, 0) 70%)"
+            }} 
+          />
+          <div 
+            className="absolute -bottom-40 -right-40 w-[500px] h-[500px] rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(147, 51, 234, 0.12) 0%, rgba(147, 51, 234, 0) 70%)"
+            }} 
+          />
 
           {/* 4. Structural Vertical Architectural Grid Lines */}
           <div className="max-w-6xl mx-auto h-full w-full relative px-4 sm:px-6 border-x border-slate-800/30">
@@ -98,7 +114,7 @@ export default function Certificates() {
             </p>
           </div>
 
-          {/* Certificate Cards Grid - SINGLE COLUMN ON MOBILE */}
+          {/* Certificate Cards Grid */}
           <div className="relative">
             {/* Corner Alignment Crosshairs */}
             <div className="hidden md:block absolute -top-4 -left-2 font-mono text-[10px] text-slate-800 select-none">
@@ -124,7 +140,7 @@ export default function Certificates() {
       {/* MODAL LIGHTBOX */}
       {activeCert && (
         <div
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={() => setActiveCert(null)}
         >
           <div
@@ -145,12 +161,12 @@ export default function Certificates() {
             {/* Close Button */}
             <button
               onClick={() => setActiveCert(null)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white transition p-1.5 rounded-lg bg-slate-900/80 border border-slate-800 hover:bg-slate-800"
+              className="absolute top-4 right-4 text-slate-400 hover:text-white transition p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:bg-slate-800"
             >
               <X size={20} />
             </button>
 
-            {/* Image Preview - Tidak menggunakan loading="lazy" karena baru dirender saat modal dibuka, cukup decoding="async" */}
+            {/* Image Preview */}
             <div className="flex justify-center mt-2 overflow-hidden rounded-xl bg-slate-950 border border-slate-800/80">
               <img
                 src={activeCert.image}
@@ -201,59 +217,52 @@ function CertificateCard({ cert, onClick }) {
         cursor-pointer
         rounded-2xl
         border border-slate-800/80
-        bg-slate-900/40
-        backdrop-blur-sm
+        bg-[#0D131F]
         p-4 sm:p-5
-        transition-all
+        transition-colors
         duration-300
         hover:border-cyan-500/50
-        hover:bg-slate-900/60
-        hover:shadow-[0_0_25px_rgba(34,211,238,0.12)]
+        hover:bg-[#111827]
         flex flex-col
         justify-between
         overflow-hidden
       "
     >
-      {/* Subtle Card Hover Glow */}
+      {/* Lightweight Hover Glow (No Filter Blur) */}
       <div
         aria-hidden
         className="
           pointer-events-none
-          absolute -inset-[1px]
+          absolute inset-0
           rounded-2xl
-          bg-gradient-to-r
-          from-cyan-500/15
-          to-purple-500/15
-          opacity-0
-          blur-md
-          transition
+          border border-cyan-500/0
+          transition-colors
           duration-300
-          group-hover:opacity-100
+          group-hover:border-cyan-500/30
         "
       />
 
       <div className="relative z-10 w-full">
-        {/* 1. THUMBNAIL PREVIEW (TOP) */}
+        {/* 1. THUMBNAIL PREVIEW */}
         <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-950 border border-slate-800/80 mb-4">
           <img
-            src={activeCertImage(cert.image)}
+            src={cert.image}
             alt={cert.title}
             loading="lazy"
             decoding="async"
             className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100"
             onError={(e) => {
-              // Fallback placeholder jika gambar gagal dimuat
               e.currentTarget.style.display = 'none';
             }}
           />
           
-          {/* Badge Icon (Floating Top Right) */}
-          <div className="absolute top-2.5 right-2.5 flex h-8 w-8 items-center justify-center rounded-lg bg-slate-900/90 backdrop-blur-md border border-slate-800 text-cyan-400 shadow-md">
+          {/* Badge Icon */}
+          <div className="absolute top-2.5 right-2.5 flex h-8 w-8 items-center justify-center rounded-lg bg-slate-900/95 border border-slate-800 text-cyan-400 shadow-sm">
             <Icon className="w-4 h-4" />
           </div>
         </div>
 
-        {/* 2. CARD CONTENT (MIDDLE) */}
+        {/* 2. CARD CONTENT */}
         <div className="space-y-2">
           {/* Year & Publisher */}
           <div className="flex items-center justify-between text-xs font-mono text-slate-400">
@@ -286,7 +295,7 @@ function CertificateCard({ cert, onClick }) {
         </div>
       </div>
 
-      {/* 3. CARD FOOTER (BOTTOM) */}
+      {/* 3. CARD FOOTER */}
       <div className="relative z-10 mt-5 pt-3 border-t border-slate-800/60 flex items-center justify-between">
         <span className="text-xs font-medium text-slate-400 group-hover:text-cyan-300 transition-colors flex items-center gap-1.5">
           Lihat Sertifikat <ExternalLink className="w-3.5 h-3.5 opacity-70 group-hover:opacity-100" />
@@ -294,9 +303,4 @@ function CertificateCard({ cert, onClick }) {
       </div>
     </div>
   );
-}
-
-// Helper kecil untuk antisipasi path image
-function activeCertImage(path) {
-  return path;
 }
