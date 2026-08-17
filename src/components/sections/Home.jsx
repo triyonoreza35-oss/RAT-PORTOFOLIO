@@ -449,7 +449,7 @@ export default function Home({ isIntroActive = false }) {
             </a>
 
             <a
-              href="/cv/CV.pdf"
+              href="/cv/CV_Reza_Aditya_Triyono.pdf"
               download
               className="group inline-flex justify-center items-center px-6 xs:px-7 md:px-8 py-3 xs:py-3.5 rounded-lg border border-slate-700/80 bg-slate-900/50 text-slate-300 font-medium text-xs xs:text-sm md:text-base tracking-wide transition-all hover:bg-slate-800 hover:border-purple-500/50 hover:text-white touch-manipulation"
             >
