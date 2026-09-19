@@ -49,22 +49,29 @@ export default function Intro({ onComplete }) {
     }
   }, [onComplete, clearAllTimeouts, cancelSpeech]);
 
+  const isAnimating = useRef(true);
   // ==========================================
   // PARALLAX ENGINE (requestAnimationFrame)
   // ==========================================
+  // optimized
   const updateParallax = useCallback(() => {
-    currentMouse.current.x +=
-      (targetMouse.current.x - currentMouse.current.x) * 0.1;
+    const deltaX = targetMouse.current.x - currentMouse.current.x;
+    const deltaY = targetMouse.current.y - currentMouse.current.y;
 
-    currentMouse.current.y +=
-      (targetMouse.current.y - currentMouse.current.y) * 0.1;
+    // 🟢 SLEEP CONDITION: Jika pergerakan sudah sangat kecil (kursor diam), matikan loop!
+    if (Math.abs(deltaX) < 0.001 && Math.abs(deltaY) < 0.001) {
+      isAnimating.current = false;
+      return; // <-- Menghentikan eksekusi requestAnimationFrame
+    }
+
+    currentMouse.current.x += deltaX * 0.1;
+    currentMouse.current.y += deltaY * 0.1;
 
     if (containerRef.current) {
       containerRef.current.style.setProperty(
         "--mx",
         currentMouse.current.x.toFixed(3),
       );
-
       containerRef.current.style.setProperty(
         "--my",
         currentMouse.current.y.toFixed(3),
@@ -78,31 +85,30 @@ export default function Intro({ onComplete }) {
     const handleMouseMove = (e) => {
       const x = (e.clientX / window.innerWidth) * 2 - 1;
       const y = (e.clientY / window.innerHeight) * 2 - 1;
-
       targetMouse.current = { x, y };
+
+      // 🟢 WAKE UP CONDITION: Jika mesin sedang tidur, nyalakan kembali saat kursor bergerak
+      if (!isAnimating.current) {
+        isAnimating.current = true;
+        requestRef.current = requestAnimationFrame(updateParallax);
+      }
     };
 
-    window.addEventListener("mousemove", handleMouseMove, {
-      passive: true,
-    });
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
 
+    // Mulai animasi pertama kali saat mount
+    isAnimating.current = true;
     requestRef.current = requestAnimationFrame(updateParallax);
-
     document.body.style.overflow = "hidden";
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-
-      if (requestRef.current) {
-        cancelAnimationFrame(requestRef.current);
-      }
-
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
       document.body.style.overflow = "";
       clearAllTimeouts();
       cancelSpeech();
     };
   }, [updateParallax, clearAllTimeouts, cancelSpeech]);
-
   // ==========================================
   // TIMELINE SEQUENCE (Triggered by User)
   // ==========================================
@@ -388,7 +394,7 @@ export default function Intro({ onComplete }) {
                 </div>
                 {/* Panah bubble disesuaikan posisinya di mobile agar tetap menunjuk ke kepala robot */}
                 <div className="w-2 h-2 bg-[#12131C] border-r border-b border-cyan-500/60 rotate-45 ml-6 sm:mx-auto -mt-1" />
-              </div>  
+              </div>
             )}
 
             {/* Robot SVG */}

@@ -1,27 +1,27 @@
 "use client";
 
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { ChevronLeft, ChevronRight, Layers } from "lucide-react";
 
 const projects = [
   {
     title: "Website Buku Tamu Digital",
     description:
-        "Layanan buku tamu digital untuk mendukung pencatatan, pengelolaan, dan rekapitulasi data kunjungan di lingkungan Kementerian BKKBN secara lebih terstruktur dan efisien.",
+      "Layanan buku tamu digital untuk mendukung pencatatan, pengelolaan, dan rekapitulasi data kunjungan di lingkungan Kementerian BKKBN secara lebih terstruktur dan efisien.",
     tech: ["Laravel", "Bootstrap", "MySQL"],
     images: ["/image/login1.webp", "/image/admin1.webp", "/image/user2.webp"],
   },
   {
     title: "Website Peminjaman Ruangan",
     description:
-    "Sistem layanan peminjaman ruangan di Kementerian BKKBN yang memudahkan pengguna memantau ketersediaan, mengatur jadwal, dan mengurangi potensi benturan penggunaan fasilitas.",
+      "Sistem layanan peminjaman ruangan di Kementerian BKKBN yang memudahkan pengguna memantau ketersediaan, mengatur jadwal, dan mengurangi potensi benturan penggunaan fasilitas.",
     tech: ["Next.js", "React", "Tailwind CSS"],
     images: ["/image/login2.webp", "/image/admin2.webp", "/image/user3.webp"],
   },
   {
     title: "Website Bengkel Digital",
     description:
-     "Platform layanan bengkel yang memudahkan pelanggan memperoleh informasi servis, pilihan layanan, dan estimasi perawatan secara cepat, praktis, dan terstruktur.",
+      "Platform layanan bengkel yang memudahkan pelanggan memperoleh informasi servis, pilihan layanan, dan estimasi perawatan secara cepat, praktis, dan terstruktur.",
     tech: ["PHP Native", "Bootstrap", "CSS"],
     images: [
       "/image/bengkel1.webp",
@@ -35,10 +35,6 @@ export default function Projects() {
   const [activeIndex, setActiveIndex] = useState(0);
   const totalProjects = projects.length;
 
-  // Touch handlers ref
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
-
   const handlePrev = useCallback(() => {
     setActiveIndex((prev) => (prev === 0 ? totalProjects - 1 : prev - 1));
   }, [totalProjects]);
@@ -47,42 +43,7 @@ export default function Projects() {
     setActiveIndex((prev) => (prev === totalProjects - 1 ? 0 : prev + 1));
   }, [totalProjects]);
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "ArrowLeft") {
-        handlePrev();
-      } else if (e.key === "ArrowRight") {
-        handleNext();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handlePrev, handleNext]);
-
-  // Touch Swipe handlers
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchMove = (e) => {
-    touchEndX.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStartX.current || !touchEndX.current) return;
-    const distance = touchStartX.current - touchEndX.current;
-    if (distance > 50) {
-      handleNext();
-    } else if (distance < -50) {
-      handlePrev();
-    }
-    touchStartX.current = 0;
-    touchEndX.current = 0;
-  };
-
-  // Pure mathematical style calculation (Ringan, Tanpa State, Tanpa JS Resize Listener)
+  // Pure mathematical style calculation
   const getCardPositionStyle = (index) => {
     let diff = index - activeIndex;
 
@@ -177,23 +138,23 @@ export default function Projects() {
               Featured Projects
             </h2>
             <p className="text-slate-400 mt-1 italic text-xs xs:text-sm sm:text-base">
-              Solusi teknis, arsitektur aplikasi, dan eksplorasi pengembangan web.
+              Solusi teknis, arsitektur aplikasi, dan eksplorasi pengembangan
+              web.
             </p>
           </div>
 
           <div className="font-mono text-[10px] xs:text-xs text-cyan-400/90 bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-800/80 w-fit self-start md:self-auto">
             <span>PROJECT </span>
-            <span className="font-bold text-slate-100">
-              0{activeIndex + 1}
-            </span>
+            <span className="font-bold text-slate-100">0{activeIndex + 1}</span>
             <span className="text-slate-500"> / 0{totalProjects}</span>
           </div>
         </div>
 
         {/* CAROUSEL CONTAINER */}
         <div className="relative my-2 xs:my-3 sm:my-4 px-0 xs:px-1 sm:px-4 md:px-8">
-          {/* Navigation Buttons (Tanpa backdrop-blur berat) */}
+          {/* Navigation Buttons */}
           <button
+            type="button"
             onClick={handlePrev}
             aria-label="Previous project"
             className="
@@ -208,6 +169,7 @@ export default function Projects() {
           </button>
 
           <button
+            type="button"
             onClick={handleNext}
             aria-label="Next project"
             className="
@@ -221,12 +183,9 @@ export default function Projects() {
             <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
           </button>
 
-          {/* 3D Stage (Preserve-3D hanya dipasang di sini) */}
+          {/* 3D Stage */}
           <div
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            className="relative w-full min-h-[390px] xs:min-h-[400px] sm:min-h-[420px] md:min-h-[450px] lg:min-h-[470px] flex items-center justify-center py-2 overflow-x-hidden touch-pan-y [transform-style:preserve-3d]"
+            className="relative w-full min-h-[390px] xs:min-h-[400px] sm:min-h-[420px] md:min-h-[450px] lg:min-h-[470px] flex items-center justify-center py-2 overflow-x-hidden [transform-style:preserve-3d]"
             aria-live="polite"
           >
             {projects.map((project, idx) => {
@@ -236,11 +195,9 @@ export default function Projects() {
               return (
                 <div
                   key={project.title}
-                  onClick={() => !isActive && setActiveIndex(idx)}
                   className="
                     absolute w-[72vw] xs:w-[250px] sm:w-[270px] md:w-[350px] lg:w-[390px] xl:w-[430px] max-w-full
                     transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]
-                    cursor-pointer
                   "
                   style={{
                     transform: posStyle.transform,
@@ -255,17 +212,16 @@ export default function Projects() {
             })}
           </div>
 
-          {/* Indicator Dots */}
-          <div className="flex items-center justify-center gap-1.5 mt-3 sm:mt-4">
+          {/* Pure Visual Indicator Dots */}
+          <div className="flex items-center justify-center gap-1.5 mt-3 sm:mt-4 z-40 relative">
             {projects.map((_, idx) => (
-              <button
+              <div
                 key={idx}
-                onClick={() => setActiveIndex(idx)}
-                aria-label={`Go to project ${idx + 1}`}
+                aria-hidden="true"
                 className={`h-1.5 rounded-full transition-all duration-300 ${
                   activeIndex === idx
                     ? "w-6 bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.5)]"
-                    : "w-1.5 bg-slate-700 hover:bg-slate-500"
+                    : "w-1.5 bg-slate-700"
                 }`}
               />
             ))}
@@ -276,20 +232,60 @@ export default function Projects() {
   );
 }
 
-// React.memo untuk mencegah re-render card yang tidak berubah
 const ProjectCard = React.memo(function ProjectCard({ project, isActive }) {
   const [imgIndex, setImgIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(true);
+
+  // Duplikasi gambar pertama ke posisi paling akhir sebagai Clone
+  const slides = [...project.images, project.images[0]];
+  const totalOriginalImages = project.images.length;
 
   // Auto-play Image Slider HANYA saat project aktif
   useEffect(() => {
-    if (!isActive) return;
+    if (!isActive) {
+      setImgIndex(0);
+      setIsTransitioning(false);
+      return;
+    }
+
+    setIsTransitioning(true);
 
     const timer = setInterval(() => {
-      setImgIndex((prev) => (prev + 1) % project.images.length);
+      if (!project.images || project.images.length === 0) return;
+
+      setImgIndex((prev) => prev + 1);
     }, 5000);
 
     return () => clearInterval(timer);
-  }, [isActive, project.images.length]);
+  }, [isActive, project.images]);
+
+  // Handle pergantian instant dari Clone Index ke Index 0
+  useEffect(() => {
+    if (!isActive) return;
+
+    if (imgIndex === totalOriginalImages) {
+      const timeout = setTimeout(() => {
+        setIsTransitioning(false);
+        setImgIndex(0);
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setIsTransitioning(true);
+          });
+        });
+      }, 700);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [imgIndex, totalOriginalImages, isActive]);
+
+  const handleDotClick = (e, index) => {
+    e.stopPropagation();
+    setIsTransitioning(true);
+    setImgIndex(index);
+  };
+
+  const activeDotIndex = imgIndex % totalOriginalImages;
 
   return (
     <div
@@ -316,43 +312,62 @@ const ProjectCard = React.memo(function ProjectCard({ project, isActive }) {
       {isActive && (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-2xl border border-cyan-400/20"
+          className="pointer-events-none absolute inset-0 rounded-2xl border border-cyan-400/20 z-30"
         />
       )}
 
       <div className="relative z-10 w-full space-y-3">
-        {/* Image Slider Container */}
+        {/* VIEWPORT SLIDER */}
         <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-slate-950 border border-slate-800/80 select-none">
+          {/* TRACK SLIDER (Horizontal Flex Track) */}
           <div
-            className="flex h-full transition-transform duration-700 ease-in-out"
-            style={{ transform: `translateX(-${imgIndex * 100}%)` }}
+            className="flex h-full w-full"
+            style={{
+              transform: `translate3d(-${imgIndex * 100}%, 0, 0)`,
+              transition: isTransitioning
+                ? "transform 700ms ease-in-out"
+                : "none",
+            }}
           >
-            {project.images.map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt={`${project.title} screenshot ${i + 1}`}
-                loading={isActive && i === 0 ? "eager" : "lazy"}
-                decoding="async"
-                draggable={false}
-                className="w-full h-full flex-shrink-0 object-cover object-top opacity-90 group-hover:opacity-100 transition-opacity"
-              />
+            {slides.map((src, i) => (
+              <div
+                key={`${src}-${i}`}
+                style={{
+                  flex: "0 0 100%",
+                  width: "100%",
+                  minWidth: "100%",
+                  height: "100%",
+                }}
+                className="relative h-full w-full bg-slate-950 overflow-hidden"
+              >
+                <img
+                  src={src}
+                  alt={`${project.title} screenshot ${(i % totalOriginalImages) + 1}`}
+                  loading={isActive && i === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  draggable={false}
+                  className="block h-full w-full object-contain object-center"
+                />
+              </div>
             ))}
           </div>
 
-          {/* Dots Indicator */}
-          <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-slate-950/90 border border-slate-800/80">
+          {/* Dots Indicator Internal Project Card */}
+          <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-slate-950/90 border border-slate-800/80 z-20">
             {project.images.map((_, i) => (
-              <span
+              <button
                 key={i}
+                type="button"
+                onClick={(e) => handleDotClick(e, i)}
+                aria-label={`Go to screenshot ${i + 1}`}
                 className={`h-1 rounded-full transition-all duration-300 ${
-                  imgIndex === i ? "w-3 bg-cyan-400" : "w-1 bg-slate-600"
+                  activeDotIndex === i ? "w-3 bg-cyan-400" : "w-1 bg-slate-600"
                 }`}
               />
             ))}
           </div>
 
-          <div className="absolute top-1.5 right-1.5 flex h-5.5 w-5.5 items-center justify-center rounded-md bg-slate-900/90 border border-slate-800 text-cyan-400 shadow-sm pointer-events-none">
+          <div className="absolute top-1.5 right-1.5 flex h-5.5 w-5.5 items-center justify-center rounded-md bg-slate-900/90 border border-slate-800 text-cyan-400 shadow-sm pointer-events-none z-20">
             <Layers className="w-3 h-3" />
           </div>
         </div>

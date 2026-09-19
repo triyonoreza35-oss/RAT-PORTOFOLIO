@@ -14,16 +14,13 @@ const ROLES = [
   "Menciptakan Web yang Cepat & Menarik",
 ];
 
-export default function Home({ isIntroActive = false }) {
-  // State Typing Effect
+// 🟢 KOMPONEN BARU: Diisolasi agar re-render 70ms hanya terjadi di dalam teks kecil ini!
+function TypewriterText({ isIntroActive }) {
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [canStartTyping, setCanStartTyping] = useState(false);
 
-  const canvasRef = useRef(null);
-
-  // 1. Pemicu start typing setelah intro selesai (jeda 300ms agar pas dengan CSS scroll-reveal)
   useEffect(() => {
     if (isIntroActive) {
       setCanStartTyping(false);
@@ -37,7 +34,6 @@ export default function Home({ isIntroActive = false }) {
     return () => clearTimeout(startTimeout);
   }, [isIntroActive]);
 
-  // 2. Typing Effect Logic Utama
   useEffect(() => {
     if (!canStartTyping) return;
 
@@ -45,25 +41,21 @@ export default function Home({ isIntroActive = false }) {
     let timer;
 
     if (!isDeleting) {
-      // Mode Mengetik
       if (displayText.length < currentFullText.length) {
         timer = setTimeout(() => {
           setDisplayText(currentFullText.slice(0, displayText.length + 1));
-        }, 70); // Typing speed: 70ms
+        }, 70);
       } else {
-        // Selesai Mengetik: Jeda 1800ms
         timer = setTimeout(() => {
           setIsDeleting(true);
         }, 1800);
       }
     } else {
-      // Mode Menghapus
       if (displayText.length > 0) {
         timer = setTimeout(() => {
           setDisplayText(currentFullText.slice(0, displayText.length - 1));
-        }, 40); // Delete speed: 40ms
+        }, 40);
       } else {
-        // Selesai Menghapus: Jeda 400ms lalu ganti kalimat berikutnya
         timer = setTimeout(() => {
           setIsDeleting(false);
           setRoleIndex((prev) => (prev + 1) % ROLES.length);
@@ -74,14 +66,28 @@ export default function Home({ isIntroActive = false }) {
     return () => clearTimeout(timer);
   }, [displayText, isDeleting, roleIndex, canStartTyping]);
 
-  // Particle Canvas Animation
+  return (
+    <span className="inline-flex items-center text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-mono tracking-tight">
+      {displayText}
+      <span className="inline-block w-[2px] sm:w-[3px] h-[0.85em] bg-cyan-400 ml-1 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,211,238,0.9)]" />
+    </span>
+  );
+}
+
+// ==========================================
+// KOMPONEN UTAMA (HOME)
+// ==========================================
+export default function Home({ isIntroActive = false }) {
+  const canvasRef = useRef(null);
+
+  // 🟢 Particle Canvas Animation (Kode yang sudah dioptimasi dari Phase 1)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
 
     let animationFrameId;
-    let isRunning = false; // Flag status loop animation
+    let isRunning = false;
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
@@ -92,9 +98,9 @@ export default function Home({ isIntroActive = false }) {
     const RETARGET_MIN_S = 2.5;
     const RETARGET_MAX_S = 5.5;
     const CONNECTION_DIST = 120;
-    const CONNECTION_DIST_SQ = CONNECTION_DIST * CONNECTION_DIST; // Pre-calculated square
+    const CONNECTION_DIST_SQ = CONNECTION_DIST * CONNECTION_DIST;
     const MOUSE_RADIUS = 140;
-    const MOUSE_RADIUS_SQ = MOUSE_RADIUS * MOUSE_RADIUS; // Pre-calculated square
+    const MOUSE_RADIUS_SQ = MOUSE_RADIUS * MOUSE_RADIUS;
     const MOUSE_FORCE = 0.9;
     const EDGE_MARGIN = 30;
 
@@ -136,10 +142,30 @@ export default function Home({ isIntroActive = false }) {
       mouseY = e.clientY;
     };
 
+    let cellSize = CONNECTION_DIST;
+    let cols = 0;
+    let rows = 0;
+    let grid = [];
+
+    const initGrid = () => {
+      cols = Math.max(1, Math.ceil(width / cellSize));
+      rows = Math.max(1, Math.ceil(height / cellSize));
+      const totalCells = cols * rows;
+
+      if (grid.length < totalCells) {
+        for (let i = grid.length; i < totalCells; i++) {
+          grid.push([]);
+        }
+      }
+    };
+
     const handleResize = () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
+      initGrid();
     };
+
+    initGrid();
 
     let lastTime = performance.now();
 
@@ -151,14 +177,9 @@ export default function Home({ isIntroActive = false }) {
 
       ctx.clearRect(0, 0, width, height);
 
-      // --- SPATIAL GRID INITIALIZATION ---
-      const cellSize = CONNECTION_DIST;
-      const cols = Math.max(1, Math.ceil(width / cellSize));
-      const rows = Math.max(1, Math.ceil(height / cellSize));
-      const grid = new Array(cols * rows);
-
-      for (let i = 0; i < grid.length; i++) {
-        grid[i] = [];
+      const totalCells = cols * rows;
+      for (let i = 0; i < totalCells; i++) {
+        grid[i].length = 0;
       }
 
       particles.forEach((p) => {
@@ -177,11 +198,7 @@ export default function Home({ isIntroActive = false }) {
 
         if (mouseDistSq < MOUSE_RADIUS_SQ && mouseDistSq > 0.000001) {
           const mouseDist = Math.sqrt(mouseDistSq);
-          const strength =
-            (1 - mouseDist / MOUSE_RADIUS) *
-            MOUSE_FORCE *
-            (0.4 + p.depth * 0.6);
-
+          const strength = (1 - mouseDist / MOUSE_RADIUS) * MOUSE_FORCE * (0.4 + p.depth * 0.6);
           p.vx += (dx / mouseDist) * strength * dt;
           p.vy += (dy / mouseDist) * strength * dt;
         }
@@ -212,31 +229,23 @@ export default function Home({ isIntroActive = false }) {
         ctx.fillStyle = `rgba(34, 211, 238, ${p.baseOpacity})`;
         ctx.fill();
 
-        // Masukkan partikel ke dalam Spatial Grid
-        const col = Math.floor(
-          Math.max(0, Math.min(p.x, width - 1)) / cellSize,
-        );
-        const row = Math.floor(
-          Math.max(0, Math.min(p.y, height - 1)) / cellSize,
-        );
+        const col = Math.floor(Math.max(0, Math.min(p.x, width - 1)) / cellSize);
+        const row = Math.floor(Math.max(0, Math.min(p.y, height - 1)) / cellSize);
         const cellIndex = col + row * cols;
-        grid[cellIndex].push(p);
+        if (grid[cellIndex]) {
+          grid[cellIndex].push(p);
+        }
       });
 
-      // --- OPTIMIZED CONNECTION CHECK VIA SPATIAL GRID ---
       const neighborOffsets = [
-        [0, 0],
-        [1, 0],
-        [-1, 1],
-        [0, 1],
-        [1, 1],
+        [0, 0], [1, 0], [-1, 1], [0, 1], [1, 1],
       ];
 
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const currentCellIndex = c + r * cols;
           const cellParticles = grid[currentCellIndex];
-          if (cellParticles.length === 0) continue;
+          if (!cellParticles || cellParticles.length === 0) continue;
 
           for (let o = 0; o < neighborOffsets.length; o++) {
             const nc = c + neighborOffsets[o][0];
@@ -245,7 +254,7 @@ export default function Home({ isIntroActive = false }) {
             if (nc >= 0 && nc < cols && nr >= 0 && nr < rows) {
               const neighborCellIndex = nc + nr * cols;
               const neighborParticles = grid[neighborCellIndex];
-              if (neighborParticles.length === 0) continue;
+              if (!neighborParticles || neighborParticles.length === 0) continue;
 
               const isSameCell = currentCellIndex === neighborCellIndex;
 
@@ -266,9 +275,7 @@ export default function Home({ isIntroActive = false }) {
                     ctx.beginPath();
                     ctx.moveTo(p1.x, p1.y);
                     ctx.lineTo(p2.x, p2.y);
-                    ctx.strokeStyle = `rgba(167, 139, 250, ${
-                      (1 - dist / CONNECTION_DIST) * (0.25 + depthFactor * 0.3)
-                    })`;
+                    ctx.strokeStyle = `rgba(167, 139, 250, ${(1 - dist / CONNECTION_DIST) * (0.25 + depthFactor * 0.3)})`;
                     ctx.lineWidth = 0.5;
                     ctx.stroke();
                   }
@@ -279,7 +286,6 @@ export default function Home({ isIntroActive = false }) {
         }
       }
 
-      // --- MOUSE CONNECTION LINE CHECK ---
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
         const mdx = p.x - mouseX;
@@ -297,13 +303,11 @@ export default function Home({ isIntroActive = false }) {
         }
       }
 
-      // Panggil frame berikutnya hanya jika isRunning true
       if (isRunning) {
         animationFrameId = requestAnimationFrame(render);
       }
     };
 
-    // --- CONTROLLER ANIMATION LOOP ---
     const startLoop = () => {
       if (isRunning) return;
       isRunning = true;
@@ -313,12 +317,9 @@ export default function Home({ isIntroActive = false }) {
 
     const stopLoop = () => {
       isRunning = false;
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
 
-    // Pause/Resume saat canvas masuk/keluar dari viewport
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !document.hidden) {
@@ -327,24 +328,18 @@ export default function Home({ isIntroActive = false }) {
           stopLoop();
         }
       },
-      { threshold: 0 },
+      { threshold: 0 }
     );
 
     observer.observe(canvas);
 
-    // Pause/Resume saat tab di-background
     const handleVisibilityChange = () => {
-      if (document.hidden) {
-        stopLoop();
-      } else if (canvas.getBoundingClientRect().bottom > 0) {
-        startLoop();
-      }
+      if (document.hidden) stopLoop();
+      else if (canvas.getBoundingClientRect().bottom > 0) startLoop();
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("mousemove", handleCanvasMouseMove, {
-      passive: true,
-    });
+    window.addEventListener("mousemove", handleCanvasMouseMove, { passive: true });
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -407,12 +402,8 @@ export default function Home({ isIntroActive = false }) {
               animationPlayState: isIntroActive ? "paused" : "running",
             }}
           >
-            <span className="inline-flex items-center text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-mono tracking-tight">
-              {displayText}
-
-              {/* Cursor Cyan-400 */}
-              <span className="inline-block w-[2px] sm:w-[3px] h-[0.85em] bg-cyan-400 ml-1 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,211,238,0.9)]" />
-            </span>
+            {/* 🟢 Memanggil komponen yang sudah diisolasi */}
+            <TypewriterText isIntroActive={isIntroActive} />
           </h2>
 
           {/* Description Paragraphs */}

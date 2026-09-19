@@ -63,7 +63,7 @@ function Navbar({ active, scrolled }) {
         </div>
 
         {/* Desktop Menu */}
-        <ul className="hidden md:flex items-center gap-1 p-1.5 rounded-full bg-slate-900/80 border border-slate-800/90 backdrop-blur-md shadow-xl shadow-black/30">
+        <ul className="hidden md:flex items-center gap-1 p-1.5 rounded-full bg-slate-990/80 border border-slate-800/90 backdrop-blur-md shadow-xl shadow-black/30">
           {MENUS.map((item) => {
             const id = item.toLowerCase();
             const isActive = active === id;
