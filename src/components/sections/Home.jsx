@@ -198,7 +198,10 @@ export default function Home({ isIntroActive = false }) {
 
         if (mouseDistSq < MOUSE_RADIUS_SQ && mouseDistSq > 0.000001) {
           const mouseDist = Math.sqrt(mouseDistSq);
-          const strength = (1 - mouseDist / MOUSE_RADIUS) * MOUSE_FORCE * (0.4 + p.depth * 0.6);
+          const strength =
+            (1 - mouseDist / MOUSE_RADIUS) *
+            MOUSE_FORCE *
+            (0.4 + p.depth * 0.6);
           p.vx += (dx / mouseDist) * strength * dt;
           p.vy += (dy / mouseDist) * strength * dt;
         }
@@ -229,8 +232,12 @@ export default function Home({ isIntroActive = false }) {
         ctx.fillStyle = `rgba(34, 211, 238, ${p.baseOpacity})`;
         ctx.fill();
 
-        const col = Math.floor(Math.max(0, Math.min(p.x, width - 1)) / cellSize);
-        const row = Math.floor(Math.max(0, Math.min(p.y, height - 1)) / cellSize);
+        const col = Math.floor(
+          Math.max(0, Math.min(p.x, width - 1)) / cellSize,
+        );
+        const row = Math.floor(
+          Math.max(0, Math.min(p.y, height - 1)) / cellSize,
+        );
         const cellIndex = col + row * cols;
         if (grid[cellIndex]) {
           grid[cellIndex].push(p);
@@ -238,7 +245,11 @@ export default function Home({ isIntroActive = false }) {
       });
 
       const neighborOffsets = [
-        [0, 0], [1, 0], [-1, 1], [0, 1], [1, 1],
+        [0, 0],
+        [1, 0],
+        [-1, 1],
+        [0, 1],
+        [1, 1],
       ];
 
       for (let r = 0; r < rows; r++) {
@@ -254,7 +265,8 @@ export default function Home({ isIntroActive = false }) {
             if (nc >= 0 && nc < cols && nr >= 0 && nr < rows) {
               const neighborCellIndex = nc + nr * cols;
               const neighborParticles = grid[neighborCellIndex];
-              if (!neighborParticles || neighborParticles.length === 0) continue;
+              if (!neighborParticles || neighborParticles.length === 0)
+                continue;
 
               const isSameCell = currentCellIndex === neighborCellIndex;
 
@@ -328,7 +340,7 @@ export default function Home({ isIntroActive = false }) {
           stopLoop();
         }
       },
-      { threshold: 0 }
+      { threshold: 0 },
     );
 
     observer.observe(canvas);
@@ -339,7 +351,9 @@ export default function Home({ isIntroActive = false }) {
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("mousemove", handleCanvasMouseMove, { passive: true });
+    window.addEventListener("mousemove", handleCanvasMouseMove, {
+      passive: true,
+    });
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -440,7 +454,7 @@ export default function Home({ isIntroActive = false }) {
             </a>
 
             <a
-              href="/cv/CV_Reza_Aditya_Triyono_Web_Developer.pdf"
+              href="/cv/CV_Reza Aditya Triyono.pdf"
               download
               className="group inline-flex justify-center items-center px-6 xs:px-7 md:px-8 py-3 xs:py-3.5 rounded-lg border border-slate-700/80 bg-slate-900/50 text-slate-300 font-medium text-xs xs:text-sm md:text-base tracking-wide transition-all hover:bg-slate-800 hover:border-purple-500/50 hover:text-white touch-manipulation"
             >
