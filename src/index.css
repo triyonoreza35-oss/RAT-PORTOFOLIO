@@ -261,6 +261,32 @@ html {
     animation: none !important;
   }
 }
+/* ============================================
+   6. PROJECTS CAROUSEL — MOBILE EQUAL CARD HEIGHT
+   ============================================ */
+@media (max-width: 639px) {
+  /* Stage dibuat lebih tinggi dari kartu agar border tidak terpotong */
+  #projects .project-stage {
+    min-height: 430px;
+  }
 
+  /* Semua pembungkus kartu tingginya sama */
+  #projects .project-slot {
+    height: 400px;
+  }
+
+  /* Kartu mengisi penuh pembungkus, tag tetap menempel di bawah (justify-between) */
+  #projects .project-card {
+    height: 100%;
+  }
+
+  /* Deskripsi maksimal 4 baris */
+  #projects .project-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
 
 

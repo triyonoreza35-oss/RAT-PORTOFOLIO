@@ -40,7 +40,7 @@ const projects = [
       "NAT/PAT",
       "Cisco ASA Firewall",
     ],
-    images: ["/image/jaringan.webp"],
+    images: ["/image/jaringan.png"],
   },
 ];
 
@@ -198,7 +198,7 @@ export default function Projects() {
 
           {/* 3D Stage */}
           <div
-            className="relative w-full min-h-[390px] xs:min-h-[400px] sm:min-h-[420px] md:min-h-[450px] lg:min-h-[470px] flex items-center justify-center py-2 overflow-x-hidden [transform-style:preserve-3d]"
+            className="project-stage relative w-full min-h-[390px] xs:min-h-[400px] sm:min-h-[420px] md:min-h-[450px] lg:min-h-[470px] flex items-center justify-center py-2 overflow-x-hidden [transform-style:preserve-3d]"
             aria-live="polite"
           >
             {projects.map((project, idx) => {
@@ -209,6 +209,7 @@ export default function Projects() {
                 <div
                   key={project.title}
                   className="
+                    project-slot
                     absolute w-[72vw] xs:w-[250px] sm:w-[270px] md:w-[350px] lg:w-[390px] xl:w-[430px] max-w-full
                     transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]
                   "
@@ -303,9 +304,11 @@ const ProjectCard = React.memo(function ProjectCard({ project, isActive }) {
   return (
     <div
       className={`
+        project-card
         group
         relative
         w-full
+        max-sm:h-full
         rounded-2xl
         border
         bg-[#0D131F]
@@ -391,11 +394,11 @@ const ProjectCard = React.memo(function ProjectCard({ project, isActive }) {
             {project.title}
           </h3>
 
-          <p className="text-slate-400 text-[10px] xs:text-xs leading-relaxed">
+          <p className="project-desc text-slate-400 text-[10px] xs:text-xs leading-relaxed">
             {project.description}
           </p>
         </div>
-      </div>
+      </div>  
 
       {/* Tech Stack */}
       <div className="relative z-10 mt-3 pt-2.5 border-t border-slate-800/60 flex flex-wrap gap-1">
