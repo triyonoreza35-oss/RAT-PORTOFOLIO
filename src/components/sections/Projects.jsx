@@ -29,6 +29,19 @@ const projects = [
       "/image/bengkel3.webp",
     ],
   },
+  {
+    title: "Simulasi Jaringan Kantor (VLAN, OSPF, NAT & Firewall ASA)",
+    description:
+      "Perancangan dan simulasi infrastruktur jaringan kantor end-to-end menggunakan Cisco Packet Tracer dengan segmentasi VLAN (Karyawan, Admin, Keuangan), Inter-VLAN Routing (SVI), DHCP Server pada Multilayer Switch, routing dinamis OSPF, NAT Overload (PAT), serta pengamanan server lokal menggunakan Firewall Cisco ASA 5506-X.",
+    tech: [
+      "Cisco Packet Tracer",
+      "VLAN & SVI",
+      "OSPF",
+      "NAT/PAT",
+      "Cisco ASA Firewall",
+    ],
+    images: ["/image/jaringan.webp"],
+  },
 ];
 
 export default function Projects() {

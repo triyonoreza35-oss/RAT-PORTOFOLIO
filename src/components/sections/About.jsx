@@ -32,14 +32,17 @@ const timelineItems = [
     category: "COLLEGE DEGREE",
     title: "Mahasiswa Teknologi Informasi",
     organization: "Universitas Bina Sarana Informatika",
-    badge: "IPK 3.94",
+    badge: "IPK 3.90",
     description:
-      "Selama menempuh pendidikan di Universitas Bina Sarana Informatika, saya membangun fondasi yang kuat dalam bidang Teknologi Informasi dan pengembangan perangkat lunak. Saya mempelajari dasar-dasar pemrograman seperti variabel, conditional statement, loop, function, struktur data, serta konsep algoritma dan pemecahan masalah. Selain kemampuan teknis, saya juga mempelajari analisis sistem, basis data, rekayasa perangkat lunak, pengembangan aplikasi web, serta prinsip dasar pengujian perangkat lunak. Pendidikan ini menjadi fondasi bagi saya untuk berkembang sebagai web developer.",
+      "Selama menempuh pendidikan di Universitas Bina Sarana Informatika, saya membangun fondasi yang kuat dalam bidang Teknologi Informasi dan pengembangan perangkat lunak. Saya mempelajari dasar-dasar pemrograman seperti variabel, conditional statement, loop, function, struktur data, serta konsep algoritma dan pemecahan masalah. Selain kemampuan teknis, saya juga mempelajari analisis sistem, basis data, rekayasa perangkat lunak, pengembangan aplikasi web, serta prinsip dasar pengujian perangkat lunak. Tidak hanya berfokus pada pengembangan aplikasi, saya juga mendalami administrasi jaringan dan infrastruktur IT—mulai dari segmentasi VLAN, routing dinamis (OSPF), NAT/PAT, hingga pengamanan jaringan menggunakan Firewall Cisco ASA sebagai bekal menyeluruh di bidang Web Development maupun IT Support.",
     skills: [
       "Programming Fundamentals",
       "Web Development",
       "Database",
       "System Analysis",
+      "Network Administration (VLAN, OSPF, NAT)",
+      "Cisco ASA Firewall & Troubleshooting",
+      "IT Support & Infrastructure"
     ],
     isActive: false,
   },
@@ -59,12 +62,18 @@ const timelineItems = [
     id: "04",
     year: "PRESENT",
     category: "CURRENT FOCUS",
-    title: "Web Development & Continuous Learning",
+    title: "Full-Stack Web Development & IT Network Infrastructure",
     organization: "Self-Driven & Open to Opportunities",
     badge: "Current Focus",
     description:
-      "Saat ini saya berfokus pada pengembangan kemampuan sebagai Web Developer dengan memperdalam modern web development, clean code, responsive interface, component-based architecture, dan pengembangan aplikasi yang scalable. Saya terus membangun project nyata untuk meningkatkan kemampuan problem solving sekaligus memperluas pemahaman terhadap ekosistem teknologi web modern.",
-    skills: ["React", "Next.js", "Laravel", "UI/UX", "Clean Code"],
+      "Saat ini saya berfokus mengembangkan keahlian ganda di bidang Full-Stack Web Development dan IT Infrastructure/Network Administration. Di sisi pengembangan web, saya memperdalam arsitektur aplikasi modern yang scalable dengan React, Next.js, dan Laravel. Di saat yang sama, saya aktif mendalami administrasi jaringan enterprise berbasis Cisco (VLAN, Inter-VLAN SVI, OSPF, NAT/PAT, Firewall ASA) serta troubleshooting sistem dan perangkat end-user sebagai bekal menyeluruh untuk peran Web Developer maupun IT Support.",
+    skills: [
+    "React & Next.js",
+    "Laravel",
+    "Network Administration (VLAN, OSPF, NAT)",
+    "Cisco ASA Firewall",
+    "IT Support & Troubleshooting"
+  ],
     isActive: true,
   },
 ];
